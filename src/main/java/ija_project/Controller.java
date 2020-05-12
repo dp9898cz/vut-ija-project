@@ -16,6 +16,7 @@ public class Controller {
     private Timer timer;
     private final List<TimerMapUpdate> elementsUpdate = new ArrayList<>();
     private final List<Vehicle> vehicles = new ArrayList<>();
+    private final List<Coordinate> stops = new ArrayList<>();
     private LocalTime time = LocalTime.now();
     private LocalTime startTime = LocalTime.now();
     private int minuteCounter = 0;
@@ -81,6 +82,9 @@ public class Controller {
                 elementsUpdate.add((TimerMapUpdate) d);
                 vehicles.add((Vehicle) d);
             }
+            if (d.getClass().equals(Stop.class)) {
+                stops.add(((Stop) d).getCoordinates());
+            }
         }
     }
 
@@ -93,20 +97,39 @@ public class Controller {
                 minuteCounter++;
 
                 // every minute bus generator
-                if (minuteCounter == 18) {
+                if (minuteCounter == 180) {
                     Platform.runLater(() -> {
                         generateVehicles();
                     });
                     minuteCounter = 0;
                 }
+
+                // variables for timer update
+                Vehicle v;
+                List<Coordinate> p;
+                Coordinate pos;
+                int cntr = 0;
+
                 for (TimerMapUpdate u : elementsUpdate) {
+                    v = (Vehicle) u;
+                    p = v.getPath().getPath();
+                    pos = v.getPosition();
+                    cntr = v.getStopWaitCounter();
+                    // pokud je bus na zastavce
+                    if (stops.contains(pos) && cntr > 0) {
+                        v.setStopWaitCounter(cntr - 1);
+                        continue;
+                    }
                     u.update(time);
-                    Vehicle v = (Vehicle) u;
-                    if (v.getPosition().equals(v.getPath().getPath().get(v.getPath().getPath().size() - 1)) && v.getDistance() >= v.getPath().getPathDistance()) {
-                        System.out.println("NOW NOW NOW");
+                    if (pos.equals(p.get(p.size() - 1)) && v.getDistance() >= v.getPath().getPathDistance()) {
+                        //System.out.println("NOW NOW NOW");
+                        Vehicle finalV = v;
                         Platform.runLater(() -> {
-                            destroyBus(v);
+                            destroyBus(finalV);
                         });
+                    }
+                    if (cntr != 5) {
+                        v.setStopWaitCounter(5);
                     }
                 }
             }

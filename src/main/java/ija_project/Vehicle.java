@@ -3,38 +3,47 @@ package ija_project;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.util.StdConverter;
+
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.PopupWindow;
 import javafx.util.Duration;
 import javafx.event.EventHandler;
-import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
-import java.lang.reflect.Field;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.reflect.Field;
 
 @JsonDeserialize(converter = Vehicle.VehicleConstruct.class)
 public class Vehicle implements Drawable, TimerMapUpdate {
-    @JsonIgnore
-    private static final String SQUARE_BUBBLE = "M24 1h-24v16.981h4v5.019l7-5.019h13z";
     private Coordinate position;
     private double speed;
+    private Path path;
+
+    @JsonIgnore
+    private int stopWaitCounter = 5;
+
     @JsonIgnore
     private double distance = 0;
-    private Path path;
+
     @JsonIgnore
     private List<Shape> gui;
+
     @JsonIgnore
     private String number = "";
 
+    @JsonIgnore
+    private static final String SQUARE_BUBBLE = "M24 1h-24v16.981h4v5.019l7-5.019h13z";
+
+    // Default constructor for Jackson
     private Vehicle(){}
 
     // Constructor
@@ -83,7 +92,6 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         circle.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-
                 Tooltip cassava2 = new Tooltip(path.getNumber());
                 Tooltip.install(circle, hackTooltipStartTiming(cassava2));
                 circle.setStroke(Color.WHITE);
@@ -95,6 +103,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         this.number = this.path.getNumber();
     }
 
+    // move the bus
     private void move(Coordinate c) {
         for (Shape s : gui) {
             s.setTranslateX((c.getX() - position.getX()) + s.getTranslateX());
@@ -102,6 +111,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         }
     }
 
+    // update according to distance and speed
     @Override
     public void update(LocalTime l) {
         Platform.runLater(() -> {
@@ -113,7 +123,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
                     c = path.getPath().get(path.getPath().size() - 1);
                 }
                 else {
-                    c = path.getDistanceCoordinate(distance);
+                    c = path.getDistanceCoordinate(distance, this);
                 }
                 move(c);
                 position = c;
@@ -135,6 +145,14 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     public double getDistance() {
         return distance;
+    }
+
+    public int getStopWaitCounter() {
+        return stopWaitCounter;
+    }
+
+    public void setStopWaitCounter(int stopWaitCounter) {
+        this.stopWaitCounter = stopWaitCounter;
     }
 
     @Override

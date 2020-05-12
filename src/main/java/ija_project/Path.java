@@ -35,16 +35,23 @@ public class Path {
 
     @JsonIgnore
     // get next Coordinate depending on distance moved
-    public Coordinate getDistanceCoordinate(double distance) {
+    // distance = new distance
+    public Coordinate getDistanceCoordinate(double distance, Vehicle v) {
         double nextDistance = 0;    // distance to the next stop
         double length = 0;          // dummy distance - distance of the previous segments (helpful for the next for loop)
         Coordinate x = null;
         Coordinate y = null;
 
+        //checkDistance(distance, distance - v.getSpeed());
+
         for (int i = 0; i < path.size() - 1; i++) {
             x = path.get(i);
             y = path.get(i + 1);
             nextDistance = getDistance(x, y); // distance of two points
+            if (length + nextDistance >= distance && (distance - v.getSpeed()) < length) {
+                // v tomto pripade musime na souradnice zastavky
+                return x;
+            }
             if (length + nextDistance >= distance) break;
             length += nextDistance;
         }
