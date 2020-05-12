@@ -6,6 +6,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.shape.Shape;
+import javafx.scene.paint.Color;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -22,7 +24,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout.fxml"));
         BorderPane root = loader.load();
         primaryStage.setTitle("Public Transport");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(new Scene(root, 800, 600,Color.GREEN));
         primaryStage.show();
 
         // get the controller to use timer and import data
@@ -30,6 +32,11 @@ public class Main extends Application {
 
         // sample data
         List<Drawable> elements = new ArrayList<>();
+        elements.add(new Street("Nadrazni 2", new Coordinate(100, 100), new Coordinate(500, 500)));
+        elements.add(new Street("Nadrazni", new Coordinate(50, 320), new Coordinate(200, 150)));
+        elements.add(new Street("Nadrazni3", new Coordinate(400, 400), new Coordinate(350, 350)));
+        elements.add(new Street("Nadrazni4", new Coordinate(200, 200), new Coordinate(50, 400)));
+
         Vehicle vehicle = new Vehicle(new Coordinate(100, 100), 10, new Path(Arrays.asList(
                 new Coordinate(100, 100),
                 new Coordinate(500, 500),
@@ -40,8 +47,6 @@ public class Main extends Application {
                 new Coordinate(100, 300),
                 new Coordinate(500, 50)
         ))));
-        elements.add(new Street("Nádražní 2", new Coordinate(100, 100), new Coordinate(500, 500)));
-        elements.add(new Street("Nádražní", new Coordinate(50, 320), new Coordinate(200, 150)));
 
         // import elements to gui
         controller.setElements(elements);
