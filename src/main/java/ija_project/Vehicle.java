@@ -27,7 +27,8 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         this.path = path;
         this.speed = speed;
         this.gui = new ArrayList<>();
-        this.gui.add(new Circle(position.getX(), position.getY(), 8, Color.LAWNGREEN));
+        this.gui.add(new Circle(position.getX(), position.getY(), 8, Color.RED));
+
     }
 
 
