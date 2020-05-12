@@ -20,6 +20,8 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     private Path path;
     @JsonIgnore
     private List<Shape> gui;
+    @JsonIgnore
+    private String number = "";
 
     private Vehicle(){}
 
@@ -29,6 +31,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         this.path = path;
         this.speed = speed;
         setGui();
+        setNumber();
     }
 
     @Override
@@ -38,7 +41,11 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     private void setGui() {
         this.gui = new ArrayList<>();
-        this.gui.add(new Circle(position.getX(), position.getY(), 8, Color.LAWNGREEN));
+        this.gui.add(new Circle(position.getX(), position.getY(), 8, Color.RED));
+    }
+
+    private void setNumber() {
+        this.number = this.path.getNumber();
     }
 
     private void move(Coordinate c) {
@@ -87,6 +94,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         @Override
         public Vehicle convert(Vehicle value) {
             value.setGui();
+            value.setNumber();
             return value;
         }
     }

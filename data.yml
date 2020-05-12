@@ -19,21 +19,27 @@ stops:
   - &9 coordinates: *7
   - &10 coordinates: *8
   - &11 coordinates: *2
+
+paths:
+  - &100 path:
+      - *1
+      - *6
+      - *1
+    number: "25"
+  - &101 path:
+      - *3
+      - *2
+    number: "55"
 vehicles:
 - position: *1
   speed: 10.0
   path:
-    path:
-    - *1
-    - *6
-    - *1
+    *100
 - position:
     *3
   speed: 10.0
   path:
-    path:
-    - *3
-    - *2
+    *101
 streets:
   - start:
       *1

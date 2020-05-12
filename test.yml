@@ -2,51 +2,23 @@ coordinates:
 - &1 x: 100.0
   y: 100.0
 vehicles:
-- position: *1
-  speed: 10.0
-  path:
-    path:
-    - *1
-    - &2 x: 500.0
-      y: 500.0
-    - *1
 - position:
-    &3 x: 50.0
+    &2 x: 50.0
     y: 320.0
   speed: 10.0
   path:
-    path:
+    &3 path:
     - &4 x: 100.0
       y: 300.0
     - &5 x: 500.0
       y: 50.0
-streets:
-- start:
-    &6 x: 100.0
-    y: 100.0
-  end:
-    &7 x: 500.0
+    number: "55"
+streets: null
+stops: null
+paths:
+- &6 path:
+  - *1
+  - &7 x: 500.0
     y: 500.0
-  name: "NĂˇdraĹľnĂ­ 2"
-  stops:
-  - &8 coordinates:
-      &9 x: 200.0
-      y: 200.0
-  - &10 coordinates:
-      &11 x: 300.0
-      y: 300.0
-- start:
-    &12 x: 50.0
-    y: 320.0
-  end:
-    &13 x: 200.0
-    y: 150.0
-  name: "NĂˇdraĹľnĂ­"
-  stops:
-  - &14 coordinates:
-      &15 x: 200.0
-      y: 150.0
-stops:
-- *8
-- *10
-- *14
+  - *1
+  number: "25"

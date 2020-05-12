@@ -54,6 +54,13 @@ public class Stop implements Drawable{
         this.street = street;
     }
 
+    @Override
+    public String toString() {
+        return "Stop{" +
+                "coordinates=" + coordinates +
+                '}';
+    }
+
     static class StopConstruct extends StdConverter<Stop,Stop> {
         @Override
         public Stop convert(Stop value) {

@@ -1,17 +1,22 @@
 package ija_project;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.List;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Path {
     private List<Coordinate> path;
+    private String number;
 
     private Path(){}
 
     // Constructor
-    public Path(List<Coordinate> path) {
+    public Path(List<Coordinate> path, String number) {
         this.path = path;
+        this.number = number;
     }
 
     @JsonIgnore
@@ -53,6 +58,10 @@ public class Path {
 
     public List<Coordinate> getPath() {
         return path;
+    }
+
+    public String getNumber() {
+        return number;
     }
 
     @Override

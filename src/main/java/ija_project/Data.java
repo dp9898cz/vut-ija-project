@@ -8,14 +8,16 @@ public class Data {
     private List<Vehicle> vehicles;
     private List<Street> streets;
     private List<Stop> stops;
+    private List<Path> paths;
 
     private Data(){}
 
-    public Data(List<Coordinate> coordinates, List<Vehicle> vehicles, List<Street> streets, List<Stop> stops) {
+    public Data(List<Coordinate> coordinates, List<Vehicle> vehicles, List<Street> streets, List<Stop> stops, List<Path> paths) {
         this.coordinates = coordinates;
         this.vehicles = vehicles;
         this.streets = streets;
         this.stops = stops;
+        this.paths = paths;
     }
 
     public List<Coordinate> getCoordinates() {
@@ -32,6 +34,10 @@ public class Data {
 
     public List<Stop> getStops() {
         return stops;
+    }
+
+    public List<Path> getPaths() {
+        return paths;
     }
 
     @Override

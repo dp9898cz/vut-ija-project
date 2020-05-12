@@ -31,20 +31,17 @@ public class Main extends Application {
         Controller controller = loader.getController();
 
         // sample data
-//        List<Coordinate> coordinates = new ArrayList<>();
-//        List<Vehicle> vehicles = new ArrayList<>();
-//        coordinates.add(new Coordinate(100, 100));
+        List<Coordinate> coordinates = new ArrayList<>();
+        List<Path> paths = new ArrayList<>();
+      List<Vehicle> vehicles = new ArrayList<>();
+        coordinates.add(new Coordinate(100, 100));
 //
-//        vehicles.add(new Vehicle(coordinates.get(0), 10, new Path(Arrays.asList(
-//                coordinates.get(0),
-//                new Coordinate(500, 500),
-//                coordinates.get(0)
-//        ))));
+       paths.add(new Path(Arrays.asList(coordinates.get(0), new Coordinate(500, 500), coordinates.get(0)), "25"));
 //        elements.add(vehicles.get(0));
-//        vehicles.add(new Vehicle(new Coordinate(50, 320), 10, new Path(Arrays.asList(
-//                new Coordinate(100, 300),
-//                new Coordinate(500, 50)
-//        ))));
+        vehicles.add(new Vehicle(new Coordinate(50, 320), 10, new Path(Arrays.asList(
+                new Coordinate(100, 300),
+                new Coordinate(500, 50)
+        ), "55")));
 //        elements.add(vehicles.get(1));
 //        List<Stop> stops = new ArrayList<>();
 //        stops.add(new Stop(new Coordinate(200, 200)));
@@ -54,22 +51,25 @@ public class Main extends Application {
 //        streets.add(new Street("Nádražní 2", new Coordinate(100, 100), new Coordinate(500, 500), Arrays.asList(stops.get(0), stops.get(1))));
 //        streets.add(new Street("Nádražní", new Coordinate(50, 320), new Coordinate(200, 150), Arrays.asList(stops.get(2))));
 
-        //Data data = new Data(coordinates, vehicles, streets, stops);
+        Data data = new Data(coordinates, vehicles, null, null, paths);
 
         YAMLFactory factory = new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER);
         ObjectMapper mapper = new ObjectMapper(factory);
 
         // serialization
-        //mapper.writeValue(new File("test.yml"), data);
+        mapper.writeValue(new File("test.yml"), data);
 
         // deserialization
         Data data1 = mapper.readValue(new File("data.yml"), Data.class);
-        System.out.println(data1);
+        System.out.println(data1.getCoordinates());
+        System.out.println(data1.getStops());
+        System.out.println(data1.getStreets());
+        System.out.println(data1.getVehicles());
 
         // import elements to gui
-        List<Drawable> elements = new ArrayList<>(data1.getVehicles());
-        elements.addAll(new ArrayList<>(data1.getStreets()));
+        List<Drawable> elements = new ArrayList<>(data1.getStreets());
         elements.addAll(new ArrayList<>(data1.getStops()));
+        elements.addAll(new ArrayList<>(data1.getVehicles()));
         controller.setElements(elements);
 
         // start the timer with the scale 1

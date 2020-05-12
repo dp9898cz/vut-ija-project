@@ -103,6 +103,16 @@ public class Street implements Drawable{
 
     }
 
+    @Override
+    public String toString() {
+        return "Street{" +
+                "start=" + start +
+                ", end=" + end +
+                ", name='" + name + '\'' +
+                ", stops=" + stops +
+                '}';
+    }
+
     static class StreetConstruct extends StdConverter<Street, Street> {
 
         @Override
