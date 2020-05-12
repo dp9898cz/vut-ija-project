@@ -6,6 +6,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.shape.Shape;
+import javafx.scene.paint.Color;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -22,7 +24,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/layout.fxml"));
         BorderPane root = loader.load();
         primaryStage.setTitle("Public Transport");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(new Scene(root, 800, 600,Color.GREEN));
         primaryStage.show();
 
         // get the controller to use timer and import data
