@@ -70,17 +70,20 @@ public class Street implements Drawable{
         line2.setStrokeWidth(20);
         line2.setStrokeLineCap(StrokeLineCap.ROUND);
 
-        Text text = new Text(Math.min(start.getX(), end.getX()) + (abs(start.getX() - end.getX()) / 2),
-                Math.min(start.getY(), end.getY())  + (abs(start.getY() - end.getY()) / 2),
-                name);
+        double distance = pow(pow(end.getX()-start.getX(),2)+pow(end.getY()-start.getY(),2),0.5);
+        System.out.println(String.format("distance: %f",  distance));
+        int dcase = 0;
+        if(distance<300){dcase = 1;}
+        if(distance>300){dcase = 2;}
+        if(distance>600){dcase = 3;}
+        if(distance>900){dcase = 4;}
+
+
         double u1 =  end.getX() - start.getX() ;
         double u2 =  end.getY() - start.getY() ;
-        double change;
-
 
         double v1 = 1;
         double v2 = 0;
-
 
         double x1 = u1*v1+ u2*v2;
         double x2 = pow(pow(u1,2)+pow(u2,2),0.5)*pow(pow(v1,2)+pow(v2,2),0.5);
@@ -96,7 +99,10 @@ public class Street implements Drawable{
         if(u1>0 && u2<0) {
             result =-result;//ok
         }
-
+        //-------------------
+        Text text = new Text(Math.min(start.getX(), end.getX()) + (abs(start.getX() - end.getX()) / 2),
+                Math.min(start.getY(), end.getY())  + (abs(start.getY() - end.getY()) / 2),
+                name);
         text.setRotate(result);
 
         return Arrays.asList(line2,line,text);
