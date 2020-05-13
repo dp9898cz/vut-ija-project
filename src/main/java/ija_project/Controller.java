@@ -1,6 +1,7 @@
 package ija_project;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -26,16 +27,29 @@ public class Controller {
 
     @FXML
     private Pane mapContent;
-
+    private static final double MAX_SCALE = 12;
+    private static final double MIN_SCALE = -10;
+    public  double zoomhandler = 0;
     @FXML
     private void onScroll(ScrollEvent e) {
         e.consume();
         // set zoom variable
         double zoom = e.getDeltaY();
+
         if (zoom > 0) {
             zoom = 1.1;
+            zoomhandler = zoomhandler+1;
         } else {
             zoom = 0.9;
+            zoomhandler = zoomhandler-1;
+        }
+        if(zoomhandler>MAX_SCALE){
+            zoomhandler=MAX_SCALE;
+            zoom =1;
+        }
+        if(zoomhandler<MIN_SCALE){
+            zoomhandler=MIN_SCALE;
+            zoom =1;
         }
         // change scale of the Pane
         mapContent.setScaleX(zoom * mapContent.getScaleX());
@@ -70,15 +84,6 @@ public class Controller {
         }
     }
 
-    private void generateOppositeVehicle(Vehicle v) {
-        List<Coordinate> oppositePath = new ArrayList<>(v.getPath().getPath());
-        Collections.reverse(oppositePath);
-        Vehicle new_v = new Vehicle(oppositePath.get(0), v.getSpeed(), new Path(oppositePath, v.getPath().getNumber()));
-        mapContent.getChildren().addAll(new_v.getGui());
-        elementsUpdate.add(new_v);
-        vehicles.add(new_v);
-    }
-
     private void destroyBus(Vehicle v) {
         this.elementsUpdate.remove(v);
         this.mapContent.getChildren().removeAll(v.getGui());
@@ -90,7 +95,6 @@ public class Controller {
             if (d instanceof TimerMapUpdate) {
                 elementsUpdate.add((TimerMapUpdate) d);
                 vehicles.add((Vehicle) d);
-                generateOppositeVehicle((Vehicle) d);
             }
             if (d.getClass().equals(Stop.class)) {
                 stops.add(((Stop) d).getCoordinates());
@@ -125,7 +129,6 @@ public class Controller {
                     p = v.getPath().getPath();
                     pos = v.getPosition();
                     cntr = v.getStopWaitCounter();
-
                     // pokud je bus na zastavce
                     if (stops.contains(pos) && cntr > 0) {
                         v.setStopWaitCounter(cntr - 1);
@@ -133,7 +136,7 @@ public class Controller {
                     }
                     u.update(time);
                     if (pos.equals(p.get(p.size() - 1)) && v.getDistance() >= v.getPath().getPathDistance()) {
-                        System.out.println("NOW NOW NOW");
+                        //System.out.println("NOW NOW NOW");
                         Vehicle finalV = v;
                         Platform.runLater(() -> {
                             destroyBus(finalV);
@@ -145,5 +148,15 @@ public class Controller {
                 }
             }
         }, 1000, (long) (1000 / scale));
+    }
+    @FXML
+    public void clickHelp(javafx.event.ActionEvent actionEvent) {
+        Alert alert=new Alert(Alert.AlertType.INFORMATION,"Tohle je help");
+        alert.showAndWait();
+    }
+    @FXML
+    public void onCloseapp(ActionEvent actionEvent) {
+        Platform.exit();
+        System.exit(0);
     }
 }
