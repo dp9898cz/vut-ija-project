@@ -28,9 +28,7 @@ public class Controller {
     @FXML
     private Timer timer;
 
-    public TextField Timer;
-    public TextField Timer_update;
-    private Timer timer;
+
     private LocalTime time = LocalTime.now();
     private final List<TimerMapUpdate> elementsUpdate = new ArrayList<>();
     private final List<Vehicle> vehicles = new ArrayList<>();
@@ -160,7 +158,7 @@ public class Controller {
         }
     }
 
-
+    int counter = 0;
     public void timer(float scale) {
         timer = new Timer(false);
         timer.scheduleAtFixedRate(new TimerTask() {
