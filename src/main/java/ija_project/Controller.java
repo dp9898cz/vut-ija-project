@@ -83,6 +83,14 @@ public class Controller {
             this.mapContent.getChildren().addAll(v.getGui());
         }
     }
+    private void generateOppositeVehicle(Vehicle v) {
+        List<Coordinate> oppositePath = new ArrayList<>(v.getPath().getPath());
+        Collections.reverse(oppositePath);
+        Vehicle new_v = new Vehicle(oppositePath.get(0), v.getSpeed(), new Path(oppositePath, v.getPath().getNumber()));
+        mapContent.getChildren().addAll(new_v.getGui());
+        elementsUpdate.add(new_v);
+        vehicles.add(new_v);
+    }
 
     private void destroyBus(Vehicle v) {
         this.elementsUpdate.remove(v);
@@ -95,6 +103,7 @@ public class Controller {
             if (d instanceof TimerMapUpdate) {
                 elementsUpdate.add((TimerMapUpdate) d);
                 vehicles.add((Vehicle) d);
+		generateOppositeVehicle((Vehicle) d);
             }
             if (d.getClass().equals(Stop.class)) {
                 stops.add(((Stop) d).getCoordinates());
