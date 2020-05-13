@@ -20,7 +20,7 @@
          <content>
             <Group>
                <children>
-                  <Pane fx:id="mapContent" layoutX="-22.0" layoutY="14.0" onScroll="#onScroll" prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-color: rgb(0,190,0);" />
+                  <Pane fx:id="mapContent" layoutX="-8.0" layoutY="14.0" maxHeight="2000.0" maxWidth="2000.0" onScroll="#onScroll" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: rgb(0,190,0);" />
                </children>
             </Group>
          </content>
@@ -47,11 +47,12 @@
               <MenuItem mnemonicParsing="false" text="Start" />
                   <MenuItem mnemonicParsing="false" text="Pause" />
                   <MenuItem mnemonicParsing="false" text="Reset" />
+                  <MenuItem mnemonicParsing="false" onAction="#onCloseapp" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem mnemonicParsing="false" onAction="#clickHelp" text="About" />
             </items>
           </Menu>
         </menus>
