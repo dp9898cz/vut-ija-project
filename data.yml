@@ -1,58 +1,276 @@
+# this is comment
 coordinates:
 - &1 x: 100.0
-  y: 100.0
-- &6 x: 500.0
-  y: 500.0
-- &3 x: 50.0
-  y: 320.0
-- &4 x: 100.0
-  y: 300.0
-- &5 x: 500.0
   y: 50.0
-- &2 x: 200.0
-  y: 150.0
-- &7 x: 200.0
-  y: 200.0
-- &8 x: 300.0
+- &2 x: 830.0
+  y: 50.0
+- &3 x: 380.0
+  y: 50.0
+- &4 x: 620.0
+  y: 50.0
+- &5 x: 40.0
+  y: 190
+- &6 x: 965.0
+  y: 190.0
+- &7 x: 320.0
+  y: 190.0
+- &8 x: 630.0
+  y: 190.0
+- &9 x: 855.0
+  y: 190.0
+- &10 x: 110.0
+  y: 450.0
+- &11 x: 500.0
+  y: 540.0
+- &12 x: 305.0
+  y: 495.0
+- &13 x: 50.0
+  y: 890.0
+- &14 x: 275.0
+  y: 715.0
+- &15 x: 90.0
+  y: 940.0
+- &16 x: 980.0
+  y: 940.0
+- &17 x: 410.0
+  y: 940.0
+- &18 x: 610.0
+  y: 940.0
+- &19 x: 850.0
+  y: 940.0
+- &20 x: 500.0
+  y: 390.0
+- &21 x: 965.0
+  y: 715.0
+- &22 x: 616.25
+  y: 471.25
+- &23 x: 848.75
+  y: 633.75
+- &24 x: 965.0
+  y: 965.0
+- &25 x: 965.0
+  y: 140.0
+- &26 x: 965.0
+  y: 870.0
+- &27 x: 800.0
+  y: 940.0
+- &28 x: 800.0
+  y: 50.0
+- &29 x: 800.0
+  y: 740.0
+- &30 x: 800.0
   y: 300.0
+- &31 x: 800.0
+  y: 95.0
+- &32 x: 500.0
+  y: 935.0
+- &33 x: 500.0
+  y: 10.0
+- &34 x: 500.0
+  y: 720.0
+- &35 x: 500.0
+  y: 480.0
+- &36 x: 500.0
+  y: 330.0
+- &37 x: 190.0
+  y: 980.0
+- &38 x: 190.0
+  y: 35.0
+- &39 x: 190.0
+  y: 895.0
+- &40 x: 190.0
+  y: 590.0
+- &41 x: 190.0
+  y: 320.0
+- &42 x: 190.0
+  y: 125.0
 stops:
-  - &9 coordinates: *7
-  - &10 coordinates: *8
-  - &11 coordinates: *2
+  - &200 coordinates: *1
+  - &201 coordinates: *3
+  - &202 coordinates: *4
+  - &204 coordinates: *7
+  - &205 coordinates: *8
+  - &206 coordinates: *9
+  - &207 coordinates: *12
+  - &208 coordinates: *14
+  - &209 coordinates: *17
+  - &210 coordinates: *18
+  - &211 coordinates: *19
+  - &212 coordinates: *22
+  - &213 coordinates: *23
+  - &214 coordinates: *26
+  - &215 coordinates: *29
+  - &216 coordinates: *30
+  - &217 coordinates: *31
+  - &218 coordinates: *34
+  - &219 coordinates: *35
+  - &220 coordinates: *36
+  - &221 coordinates: *39
+  - &222 coordinates: *40
+  - &223 coordinates: *41
+  - &224 coordinates: *42
+  - &225 coordinates: *37
+  - &226 coordinates: *38
+  - &227 coordinates: *25
+  - &228 coordinates: *24
+
 
 paths:
   - &100 path:
-      - *1
-      - *6
-      - *1
-    number: "25"
-  - &101 path:
+      - *4
       - *3
-      - *2
-    number: "55"
+      - x: 190.0
+        y: 50.0
+      - *42
+      - *41
+      - *40
+      - *39
+      - *17
+      - *18
+      - *29
+      - *30
+      - *31
+      - *4
+    number: "11"
+  - &101 path:
+      - *25
+      - *9
+      - *8
+      - *36
+      - *35
+      - *14
+      - *39
+      - *37
+    number: "22"
+  - &102 path:
+      - *1
+      - *42
+      - *41
+      - *12
+      - *35
+      - *22
+      - *23
+      - *26
+      - *24
+    number: "33"
+  - &103 path:
+      - *38
+      - *42
+      - *7
+      - *36
+      - *35
+      - *34
+      - *18
+      - *19
+      - *24
+    number: "44"
+
+
+
 vehicles:
 - position: *1
-  speed: 10.0
+  speed: 8.0
   path:
-    *100
-- position:
-    *3
-  speed: 10.0
+    *102
+- position: *38
+  speed: 8.0
+  path:
+    *103
+- position: *25
+  speed: 8.0
   path:
     *101
+- position: *4
+  speed: 8.0
+  path:
+    *100
+
 streets:
   - start:
       *1
     end:
+      *2
+    name: "Pod Čupy"
+    stops:
+      - *200
+      - *201
+      - *202
+  - start:
+      *5
+    end:
       *6
+    name: "Čechova"
+    stops:
+      - *204
+      - *205
+      - *206
+  - start:
+      *10
+    end:
+      *11
     name: "Nádražní"
     stops:
-      - *9
-      - *10
+      - *207
   - start:
-      *3
+      *13
     end:
-      *2
-    name: "Novákova"
+      *11
+    name: "U Kostela"
     stops:
-      - *11
+      - *208
+  - start:
+      *15
+    end:
+      *16
+    name: "Zámostí"
+    stops:
+      - *209
+      - *210
+      - *211
+  - start:
+      *20
+    end:
+      *21
+    name: "U Kapličky"
+    stops:
+      - *212
+      - *213
+  - start:
+      *24
+    end:
+      *25
+    name: "Pod Vinohrady"
+    stops:
+      - *214
+      - *227
+      - *228
+  - start:
+      *27
+    end:
+      *28
+    name: "Zahradní"
+    stops:
+      - *215
+      - *216
+      - *217
+  - start:
+      *32
+    end:
+      *33
+    name: "9. května"
+    stops:
+      - *218
+      - *219
+      - *220
+  - start:
+      *37
+    end:
+      *38
+    name: "Havlíčkova"
+    stops:
+      - *221
+      - *222
+      - *223
+      - *224
+      - *225
+      - *226
