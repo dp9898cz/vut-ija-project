@@ -5,16 +5,30 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Controller {
-
+    @FXML
+    public TextField Timer;
+    @FXML
+    public TextField Timer_update;
+    @FXML
+    public TextField searchbox ;
+    @FXML
+    public Button searchbutton;
+    @FXML
     private Timer timer;
+
     private final List<TimerMapUpdate> elementsUpdate = new ArrayList<>();
     private final List<Vehicle> vehicles = new ArrayList<>();
     private final List<Coordinate> stops = new ArrayList<>();
@@ -27,9 +41,16 @@ public class Controller {
 
     @FXML
     private Pane mapContent;
-    private static final double MAX_SCALE = 12;
+    private static final double MAX_SCALE = 5;
     private static final double MIN_SCALE = -10;
     public  double zoomhandler = 0;
+
+    @FXML
+    private void searchAction() {
+        float search = Float.parseFloat(searchbox.getText());
+
+    }
+
     @FXML
     private void onScroll(ScrollEvent e) {
         e.consume();
@@ -110,7 +131,7 @@ public class Controller {
             }
         }
     }
-
+    int counter= 0;
     public void timer(float scale) {
         timer = new Timer(false);
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -134,6 +155,7 @@ public class Controller {
                 int cntr = 0;
 
                 for (TimerMapUpdate u : elementsUpdate) {
+
                     v = (Vehicle) u;
                     p = v.getPath().getPath();
                     pos = v.getPosition();
@@ -154,9 +176,19 @@ public class Controller {
                     if (cntr != 5) {
                         v.setStopWaitCounter(5);
                     }
+
+
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                    LocalDateTime now = LocalDateTime.now();
+                    Timer.setText(dtf.format(now));
+                    counter++;
+                    String s=String.valueOf(counter);
+                    Timer_update.setText(s);
+
+
                 }
             }
-        }, 1000, (long) (1000 / scale));
+        }, 0, (long) (1000 / scale));
     }
     @FXML
     public void clickHelp(javafx.event.ActionEvent actionEvent) {

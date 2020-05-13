@@ -20,7 +20,7 @@
          <content>
             <Group>
                <children>
-                  <Pane fx:id="mapContent" layoutX="-8.0" layoutY="14.0" maxHeight="2000.0" maxWidth="2000.0" onScroll="#onScroll" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: rgb(0,190,0);" />
+                  <Pane fx:id="mapContent" layoutX="-8.0" layoutY="6.0" maxHeight="1000.0" maxWidth="1000.0" onScroll="#onScroll" prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-color: rgb(0,190,0);" />
                </children>
             </Group>
          </content>
@@ -31,11 +31,17 @@
          <children>
             <Button layoutX="69.0" layoutY="67.0" mnemonicParsing="false" onAction="#onScaleChange" text="Použít" />
             <Text layoutX="17.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Změnit rychlost animace (1-10):" />
-            <TextField fx:id="scaleTextField" layoutX="18.0" layoutY="35.0" prefHeight="25.0" prefWidth="150.0" promptText="1" />
+            <TextField fx:id="scaleTextField" alignment="BOTTOM_RIGHT" layoutX="18.0" layoutY="35.0" prefHeight="25.0" prefWidth="150.0" promptText="1" />
             <Button layoutX="68.0" layoutY="219.0" mnemonicParsing="false" text="Použít" />
             <Text layoutX="60.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Změnit čas " wrappingWidth="64.853515625" />
             <Slider layoutX="23.0" layoutY="193.0" prefHeight="15.0" prefWidth="150.0" />
             <ProgressBar layoutX="21.0" layoutY="152.0" prefHeight="15.0" prefWidth="150.0" progress="0.0" />
+            <TextField fx:id="Timer" alignment="BOTTOM_RIGHT" layoutX="24.0" layoutY="275.0" />
+            <TextField fx:id="Timer_update" alignment="BOTTOM_RIGHT" layoutX="21.0" layoutY="335.0" prefHeight="20.0" prefWidth="152.0" />
+            <Text layoutX="81.0" layoutY="264.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Čas" />
+            <Text layoutX="85.0" layoutY="326.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer" />
+            <TextField fx:id="searchbox" alignment="BOTTOM_LEFT" layoutX="24.0" layoutY="404.0" />
+            <Button fx:id="searchbutton" layoutX="118.0" layoutY="444.0" mnemonicParsing="false" onAction="#searchAction" text="Search" />
          </children>
       </AnchorPane>
    </right>
