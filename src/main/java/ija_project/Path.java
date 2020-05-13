@@ -49,7 +49,7 @@ public class Path {
             y = path.get(i + 1);
             nextDistance = getDistance(x, y); // distance of two points
             if (length + nextDistance >= distance && (distance - v.getSpeed()) < length) {
-                // v tomto pripade musime na souradnice zastavky
+                // we have to go to stop coordinates
                 return x;
             }
             if (length + nextDistance >= distance) break;

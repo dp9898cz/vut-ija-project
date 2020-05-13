@@ -27,10 +27,16 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     private Coordinate position;
     private double speed;
     private Path path;
+    private List<Integer> stopsTimes; // list of times at stops
+    private int goEveryXMinute = 2; // go every 2 minutes
+    private int startMinute = 1; // start every :01 :03 :05 atd
 
     @JsonIgnore
-    private int stopWaitCounter = 5;
-
+    private int stopsPassed = 0;
+    @JsonIgnore
+    private Coordinate lastStop;
+    @JsonIgnore
+    private LocalTime startTime = null;
     @JsonIgnore
     private double distance = 0;
 
@@ -47,10 +53,13 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     private Vehicle(){}
 
     // Constructor
-    public Vehicle(Coordinate position, double speed, Path path) {
+    public Vehicle(Coordinate position, double speed, Path path, List<Integer> times, int goEveryXMinute, int startMinute) {
         this.position = position;
         this.path = path;
         this.speed = speed;
+        this.stopsTimes = times;
+        this.goEveryXMinute = goEveryXMinute;
+        this.startMinute = startMinute;
         setGui();
         setNumber();
     }
@@ -116,7 +125,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     public void update(LocalTime l) {
         Platform.runLater(() -> {
                 distance += speed;
-                System.out.println(String.format("distance: %f, vzdálenost: %f", path.getPathDistance(), distance));
+                //System.out.println(String.format("distance: %f, vzdálenost: %f", path.getPathDistance(), distance));
                 Coordinate c;
                 if (distance >= path.getPathDistance()) {
                     // set the last coordinates
@@ -147,12 +156,44 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         return distance;
     }
 
-    public int getStopWaitCounter() {
-        return stopWaitCounter;
+    public List<Integer> getStopsTimes() {
+        return stopsTimes;
     }
 
-    public void setStopWaitCounter(int stopWaitCounter) {
-        this.stopWaitCounter = stopWaitCounter;
+    public int getGoEveryXMinute() {
+        return goEveryXMinute;
+    }
+
+    public int getStartMinute() {
+        return startMinute;
+    }
+
+    public int getStopsPassed() {
+        return stopsPassed;
+    }
+
+    public void setStopsPassed(int stopsPassed) {
+        this.stopsPassed = stopsPassed;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public Coordinate getLastStop() {
+        return lastStop;
+    }
+
+    public void setLastStop(Coordinate lastStop) {
+        this.lastStop = lastStop;
+    }
+
+    public String getNumber() {
+        return number;
     }
 
     @Override

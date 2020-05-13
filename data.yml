@@ -193,18 +193,64 @@ vehicles:
   speed: 8.0
   path:
     *102
+  stopsTimes:
+    - 27
+    - 31
+    - 44
+    - 34
+    - 37
+    - 42
+    - 45
+    - 21
+  goEveryXMinute: 4
+  startMinute: 0
 - position: *38
   speed: 8.0
   path:
     *103
+  stopsTimes:
+    - 21
+    - 32
+    - 47
+    - 27
+    - 37
+    - 48
+    - 37
+    - 27
+  goEveryXMinute: 4
+  startMinute: 2
 - position: *25
   speed: 8.0
   path:
     *101
+  stopsTimes:
+    - 31
+    - 36
+    - 40
+    - 26
+    - 40
+    - 44
+    - 19
+  goEveryXMinute: 4
+  startMinute: 1
 - position: *4
-  speed: 8.0
+  speed: 10.0
   path:
     *100
+  stopsTimes:
+    - 31
+    - 33
+    - 27
+    - 36
+    - 38
+    - 34
+    - 27
+    - 46
+    - 52
+    - 28
+    - 30
+  goEveryXMinute: 3
+  startMinute: 1
 
 streets:
   - start:

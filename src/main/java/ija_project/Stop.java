@@ -5,22 +5,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.util.StdConverter;
-import com.sun.javafx.fxml.builder.TriangleMeshBuilder;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.PopupWindow;
 import javafx.util.Duration;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import java.lang.reflect.Field;
-import javafx.scene.shape.TriangleMesh;
-
 import java.util.ArrayList;
 import java.util.List;
 

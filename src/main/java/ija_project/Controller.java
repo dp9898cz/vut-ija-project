@@ -1,15 +1,14 @@
 package ija_project;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -32,12 +31,10 @@ public class Controller {
     public TextField Timer;
     public TextField Timer_update;
     private Timer timer;
+    private LocalTime time = LocalTime.now();
     private final List<TimerMapUpdate> elementsUpdate = new ArrayList<>();
     private final List<Vehicle> vehicles = new ArrayList<>();
     private final List<Coordinate> stops = new ArrayList<>();
-    private LocalTime time = LocalTime.now();
-    private LocalTime startTime = LocalTime.now();
-    private int minuteCounter = 0;
 
     @FXML
     private TextField scaleTextField;
@@ -100,106 +97,169 @@ public class Controller {
         alert.showAndWait();
     }
 
-    private void generateVehicles() {
-        for (Vehicle a: vehicles) {
-            Vehicle v = new Vehicle(a.getPath().getPath().get(0), a.getSpeed(), a.getPath());
-            this.elementsUpdate.add((TimerMapUpdate) v);
+    private void generateVehicle(Vehicle a) {
+            Vehicle v = new Vehicle(a.getPath().getPath().get(0), a.getSpeed(), a.getPath(), a.getStopsTimes(), a.getGoEveryXMinute(), a.getStartMinute());
+            this.elementsUpdate.add(v);
             this.mapContent.getChildren().addAll(v.getGui());
-        }
     }
+
     private void generateOppositeVehicle(Vehicle v) {
+        // reverse lists
         List<Coordinate> oppositePath = new ArrayList<>(v.getPath().getPath());
+        List<Integer> oppositeStopTimes = new ArrayList<>(v.getStopsTimes());
         Collections.reverse(oppositePath);
-        Vehicle new_v = new Vehicle(oppositePath.get(0), v.getSpeed(), new Path(oppositePath, v.getPath().getNumber()));
-        mapContent.getChildren().addAll(new_v.getGui());
-        elementsUpdate.add(new_v);
+        Collections.reverse(oppositeStopTimes);
+
+        // change number
+        String pathName = "";
+        pathName = pathName.concat(v.getPath().getNumber());
+        String newNumber = "";
+        switch (pathName) {
+            case "11":
+                newNumber = "12";
+                break;
+            case "22":
+                newNumber = "23";
+                break;
+            case "33":
+                newNumber = "34";
+                break;
+            case "44":
+                newNumber = "45";
+                break;
+        }
+        // create new vehicle
+        Vehicle new_v = new Vehicle(oppositePath.get(0), v.getSpeed(),
+                new Path(oppositePath, newNumber),
+                oppositeStopTimes, v.getGoEveryXMinute(), v.getStartMinute() + 1);
         vehicles.add(new_v);
+        //mapContent.getChildren().addAll(new_v.getGui());
+        //elementsUpdate.add(new_v);
     }
+
 
     private void destroyBus(Vehicle v) {
         this.elementsUpdate.remove(v);
         this.mapContent.getChildren().removeAll(v.getGui());
     }
 
+
     public void setElements(List<Drawable> elements) {
         for (Drawable d : elements) {
-            mapContent.getChildren().addAll(d.getGui());
-            if (d instanceof TimerMapUpdate) {
-                elementsUpdate.add((TimerMapUpdate) d);
+            if (d.getClass().equals(Vehicle.class)) {
+                //elementsUpdate.add((TimerMapUpdate) d);
                 vehicles.add((Vehicle) d);
-		generateOppositeVehicle((Vehicle) d);
+		        generateOppositeVehicle((Vehicle) d);
             }
-            if (d.getClass().equals(Stop.class)) {
-                stops.add(((Stop) d).getCoordinates());
+            else {
+                if (d.getClass().equals(Stop.class)) {
+                    stops.add(((Stop) d).getCoordinates());
+                }
+                mapContent.getChildren().addAll(d.getGui());
             }
         }
     }
-    int counter= 0;
+
+
     public void timer(float scale) {
         timer = new Timer(false);
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                time = time.plusSeconds(1);
-                minuteCounter++;
 
-                // every minute bus generator
-                if (minuteCounter == 180) {
+                time = time.plusSeconds(1);
+
+                // todo DEBUG
+                System.out.println(time);
+
+                // another bus generator
+                for (Vehicle v : vehicles) {
                     Platform.runLater(() -> {
-                        generateVehicles();
+                        if ((time.getSecond() == 0) && ((time.getMinute() == v.getStartMinute()) || (((time.getMinute() - v.getStartMinute()) % v.getGoEveryXMinute()) == 0))) {
+                            generateVehicle(v);
+                        }
                     });
-                    minuteCounter = 0;
                 }
 
-                // variables for timer update
-                Vehicle v;
-                List<Coordinate> p;
-                Coordinate pos;
-                int cntr = 0;
 
-                for (TimerMapUpdate u : elementsUpdate) {
+                // timer LOOP
+                Platform.runLater(() -> {
 
-                    v = (Vehicle) u;
-                    p = v.getPath().getPath();
-                    pos = v.getPosition();
-                    cntr = v.getStopWaitCounter();
-                    // pokud je bus na zastavce
-                    if (stops.contains(pos) && cntr > 0) {
-                        v.setStopWaitCounter(cntr - 1);
-                        continue;
+                    List<Vehicle> toDelete = new ArrayList<>();
+
+                    for (TimerMapUpdate u : elementsUpdate) {
+
+                        // variables for timer update
+                        Vehicle v = (Vehicle) u;
+                        List<Coordinate> p = v.getPath().getPath();
+                        Coordinate pos = v.getPosition();
+                        LocalTime timeStart = v.getStartTime();
+                        long timePassedSinceStart = 0;
+                        long scheduledTime = 0;
+
+                        for (int i = 0; i < v.getStopsPassed() - 1; i++) {
+                            scheduledTime += v.getStopsTimes().get(i);
+                        }
+
+                        // set start time on every vehicle
+                        if (timeStart == null) {
+                            v.setStartTime(time.minusSeconds(1));
+                            v.setLastStop(v.getPosition());
+                            v.setStopsPassed(1);
+                        }
+
+                        // set the time passed variable
+                        if (timeStart != null) {
+                            timePassedSinceStart = Duration.between(timeStart, time).toMillis() / 1000;
+                        }
+
+                        //DEBUG todo
+                        if (v.getNumber().equals("22")) {
+                            System.out.println(String.format("%s: passed: %d scheduled: %d", v.getNumber(), timePassedSinceStart, scheduledTime));
+                        }
+
+                        // bus got to the Stop -> change lastStop (and quit for next calculation of scheduled Time)
+                        if (stops.contains(pos) && v.getLastStop() != pos && timePassedSinceStart != 0) {
+                            v.setLastStop(pos);
+                            v.setStopsPassed(v.getStopsPassed() + 1);
+                            continue;
+                        }
+
+                        // keep the bus on the Stop, before releasing it after time schedule is ok
+                        if (stops.contains(pos) && v.getLastStop() == pos && scheduledTime >= timePassedSinceStart && scheduledTime != 0) {
+                            continue;
+                        }
+
+                        // update the GUI
+                        u.update(time);
+
+                        // delete the bus if its in the end
+                        if (pos.equals(p.get(p.size() - 1)) && v.getDistance() >= v.getPath().getPathDistance()) {
+                            toDelete.add(v);
+                        }
                     }
-                    u.update(time);
-                    if (pos.equals(p.get(p.size() - 1)) && v.getDistance() >= v.getPath().getPathDistance()) {
-                        //System.out.println("NOW NOW NOW");
-                        Vehicle finalV = v;
-                        Platform.runLater(() -> {
-                            destroyBus(finalV);
-                        });
-                    }
-                    if (cntr != 5) {
-                        v.setStopWaitCounter(5);
+                    for (Vehicle v : toDelete) {
+                        destroyBus(v);
                     }
 
-
+                });
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                     LocalDateTime now = LocalDateTime.now();
                     Timer.setText(dtf.format(now));
                     counter++;
                     String s=String.valueOf(counter);
                     Timer_update.setText(s);
-
-
-                }
             }
         }, 0, (long) (1000 / scale));
     }
+
     @FXML
-    public void clickHelp(javafx.event.ActionEvent actionEvent) {
+    public void clickHelp() {
         Alert alert=new Alert(Alert.AlertType.INFORMATION,"Tohle je help");
         alert.showAndWait();
     }
     @FXML
-    public void onCloseapp(ActionEvent actionEvent) {
+    public void onCloseapp() {
         Platform.exit();
         System.exit(0);
     }
