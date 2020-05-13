@@ -70,6 +70,15 @@ public class Controller {
         }
     }
 
+    private void generateOppositeVehicle(Vehicle v) {
+        List<Coordinate> oppositePath = new ArrayList<>(v.getPath().getPath());
+        Collections.reverse(oppositePath);
+        Vehicle new_v = new Vehicle(oppositePath.get(0), v.getSpeed(), new Path(oppositePath, v.getPath().getNumber()));
+        mapContent.getChildren().addAll(new_v.getGui());
+        elementsUpdate.add(new_v);
+        vehicles.add(new_v);
+    }
+
     private void destroyBus(Vehicle v) {
         this.elementsUpdate.remove(v);
         this.mapContent.getChildren().removeAll(v.getGui());
@@ -81,6 +90,7 @@ public class Controller {
             if (d instanceof TimerMapUpdate) {
                 elementsUpdate.add((TimerMapUpdate) d);
                 vehicles.add((Vehicle) d);
+                generateOppositeVehicle((Vehicle) d);
             }
             if (d.getClass().equals(Stop.class)) {
                 stops.add(((Stop) d).getCoordinates());
@@ -115,6 +125,7 @@ public class Controller {
                     p = v.getPath().getPath();
                     pos = v.getPosition();
                     cntr = v.getStopWaitCounter();
+
                     // pokud je bus na zastavce
                     if (stops.contains(pos) && cntr > 0) {
                         v.setStopWaitCounter(cntr - 1);
@@ -122,7 +133,7 @@ public class Controller {
                     }
                     u.update(time);
                     if (pos.equals(p.get(p.size() - 1)) && v.getDistance() >= v.getPath().getPathDistance()) {
-                        //System.out.println("NOW NOW NOW");
+                        System.out.println("NOW NOW NOW");
                         Vehicle finalV = v;
                         Platform.runLater(() -> {
                             destroyBus(finalV);
