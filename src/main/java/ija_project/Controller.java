@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
@@ -17,6 +18,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Controller {
+    @FXML
+    public TextField Timer;
+    @FXML
+    public TextField Timer_update;
+    @FXML
+    public TextField searchbox ;
+    @FXML
+    public Button searchbutton;
+    @FXML
+    private Timer timer;
 
     public TextField Timer;
     public TextField Timer_update;
@@ -33,9 +44,16 @@ public class Controller {
 
     @FXML
     private Pane mapContent;
-    private static final double MAX_SCALE = 12;
+    private static final double MAX_SCALE = 5;
     private static final double MIN_SCALE = -10;
     public  double zoomhandler = 0;
+
+    @FXML
+    private void searchAction() {
+        float search = Float.parseFloat(searchbox.getText());
+
+    }
+
     @FXML
     private void onScroll(ScrollEvent e) {
         e.consume();
