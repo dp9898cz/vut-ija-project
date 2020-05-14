@@ -161,31 +161,40 @@ public class Controller {
     }
 
 
-    public String getLineInfo(Vehicle v) {
-        String completed = "";
-        // first get list of stops
-        List<Stop> stopsList = new ArrayList<>();
-        for (Coordinate c : v.getPath().getPath()) {
-            // decide whether the stop is real stop
-            if (stops.contains(c)) stopsList.add(allStops.get(stops.indexOf(c)));
-        }
-
-        // now I have all stops in variable stopList
-        for (int i = 1; i < stopsList.size(); i++) {
-            String line = Integer.toString(i);
-            line += ".\t";
-            LocalTime time = v.getStartTime();
-            time = time.truncatedTo(ChronoUnit.SECONDS);
-            for (int j = 0; j < i; j++) {
-                time = time.plusSeconds(v.getStopsTimes().get(j));
+    private LocalTime getPastStartTime(Vehicle v) {
+        LocalTime fakeTime = time.truncatedTo(ChronoUnit.MINUTES);
+        for (int i = 0; i < 4; i++) {
+            fakeTime = fakeTime.minusMinutes(i);
+            if (((fakeTime.getMinute() == v.getStartMinute()) || (((fakeTime.getMinute() - v.getStartMinute()) % v.getGoEveryXMinute()) == 0))) {
+                return fakeTime;
             }
-            line += time.toString(); //get scheduled time
-            line += "\t";
-            line += "Nejake jmeno zastavky";
-            line += "\n";
-            completed = completed.concat(line);
         }
-        return completed;
+        return null;
+    }
+
+    private void generateVehiclesOnTheRoad() {
+        for (Vehicle v: vehicles) {
+            LocalTime startTime = getPastStartTime(v); // start time
+            if (startTime == null) return;
+            long timePassedSinceStart = Math.abs(Duration.between(time, startTime).toMillis()) / 1000; // seconds on the run
+            long pathLengthInSeconds = v.getPathLengthInSeconds();
+            double driven = ((double) timePassedSinceStart) / pathLengthInSeconds; // % driven length
+            double distanceDriven = driven * v.getPath().getPathDistance(); // distance
+            Coordinate currentPos = v.getPath().getDistanceCoordinate(distanceDriven, v); // current position
+            Integer stopsPassed = v.findOutHowManyStopsPassedAlready((int) timePassedSinceStart);
+            Coordinate LastStop = v.findOutLastStop((int) timePassedSinceStart);
+
+            //generate
+            Vehicle vv = new Vehicle(currentPos, v.getSpeed(), v.getPath(), v.getStopsTimes(), v.getGoEveryXMinute(), v.getStartMinute());
+            vv.setStopsPassed(stopsPassed);
+            vv.setLastStop(LastStop);
+            vv.setStartTime(startTime);
+            vv.setDistance(distanceDriven);
+
+            //add it to gui
+            elementsUpdate.add(vv);
+            mapContent.getChildren().addAll(vv.getGui());
+        }
     }
 
 
@@ -204,6 +213,18 @@ public class Controller {
                 mapContent.getChildren().addAll(d.getGui());
             }
         }
+
+        // add stops to the all vehicles paths
+        for (Stop s : allStops) {
+            for (Vehicle v : vehicles) {
+                if (v.getPath().getPath().contains(s.getCoordinates())) {
+                    v.getPath().getStopList().add(s);
+                }
+            }
+        }
+
+        // there generate todo vehicles on the road
+        generateVehiclesOnTheRoad();
     }
 
     int counter = 0;

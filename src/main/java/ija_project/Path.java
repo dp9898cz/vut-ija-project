@@ -21,7 +21,6 @@ public class Path {
     public Path(List<Coordinate> path, String number) {
         this.path = path;
         this.number = number;
-        setStopList();
     }
 
     @JsonIgnore
@@ -68,8 +67,12 @@ public class Path {
                 x.getY() + (y.getY() - x.getY()) * driven);
     }
 
-    private void setStopList() {
+    public List<Stop> getStopList() {
+        return stopList;
+    }
 
+    public void setStopList(List<Stop> stopList) {
+        this.stopList = stopList;
     }
 
     public List<Coordinate> getPath() {
