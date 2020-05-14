@@ -5,11 +5,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.time.Duration;
@@ -28,34 +28,34 @@ public class Controller {
     public TextField searchbox ;
     @FXML
     public Button searchbutton;
-
+    public static TextArea textArea;
     @FXML
     private Timer timer;
-
-
-
     private LocalTime time = LocalTime.now();
     private final List<TimerMapUpdate> elementsUpdate = new ArrayList<>();
     private final List<Vehicle> vehicles = new ArrayList<>();
     private final List<Coordinate> stops = new ArrayList<>();
     private final List<Stop> allStops = new ArrayList<>();
-
     @FXML
     private TextField scaleTextField;
-
     @FXML
     private Pane mapContent;
-    private static final double MAX_SCALE = 5;
-    private static final double MIN_SCALE = -10;
+    private static final double MAX_SCALE = 10;
+    private static final double MIN_SCALE = -6;
     public  double zoomhandler = 0;
 
+    //TODO
 
     @FXML
     private void searchAction() {
         float search = Float.parseFloat(searchbox.getText());
-
     }
-
+    //Function that should print info about path
+    @FXML
+    public static void PrintigLineInfo(String string) {
+        //textArea.setText(string);
+    }
+    //Function for zooming
     @FXML
     private void onScroll(ScrollEvent e) {
         e.consume();
@@ -63,25 +63,28 @@ public class Controller {
         double zoom = e.getDeltaY();
 
         if (zoom > 0) {
-            zoom = 1.1;
             zoomhandler = zoomhandler+1;
-        } else {
-            zoom = 0.9;
+            zoom = 1.1;
+
+
+        }else {
             zoomhandler = zoomhandler-1;
+            zoom = 0.9;
         }
         if(zoomhandler>MAX_SCALE){
             zoomhandler=MAX_SCALE;
-            zoom =1;
+            zoom =1.0;
         }
         if(zoomhandler<MIN_SCALE){
             zoomhandler=MIN_SCALE;
-            zoom =1;
+            zoom =1.0;
         }
         // change scale of the Pane
+        System.out.println(zoom);
+        System.out.println(zoomhandler);
         mapContent.setScaleX(zoom * mapContent.getScaleX());
         mapContent.setScaleY(zoom * mapContent.getScaleY());
         mapContent.layout();
-
     }
     @FXML
     private void onTimeStart(){
@@ -315,26 +318,4 @@ public class Controller {
         System.exit(0);
     }
 
-
-    public void ClickLayout2Button(ActionEvent actionEvent) {
-        Street.urovenzatizeni = 1.0;
-
-    }
-
-    public void ClickLayout2Button1(ActionEvent actionEvent) {
-        Street.urovenzatizeni = 2.0;
-
-    }
-
-    public void ClickLayout2Button2(ActionEvent actionEvent) {
-        Street.urovenzatizeni = 3.0;
-
-    }
-
-    public void ClickLayout2Button3(ActionEvent actionEvent) {
-        Street.urovenzatizeni = 4.0;
-    }
-    public Double getUrovenzatizeni(){
-        return Street.urovenzatizeni;
-    }
 }

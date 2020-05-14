@@ -31,7 +31,6 @@ public class Stop implements Drawable{
     private List<Shape> gui;
 
     private Stop(){}
-
     public Stop(Coordinate coordinates) {
         this.coordinates = coordinates;
         this.street = null;
@@ -43,11 +42,9 @@ public class Stop implements Drawable{
         return tooltip;
     }
 
-
     public Tooltip hackTooltipStartTiming(Tooltip tooltip) {
         tooltip.setStyle("-fx-font-size: 16px; -fx-shape: \"" + SQUARE_BUBBLE + "\";");
         tooltip.setAnchorLocation(PopupWindow.AnchorLocation.WINDOW_BOTTOM_LEFT);
-
         try {
             Field fieldBehavior = tooltip.getClass().getDeclaredField("BEHAVIOR");
             fieldBehavior.setAccessible(true);

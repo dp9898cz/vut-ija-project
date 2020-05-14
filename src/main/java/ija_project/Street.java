@@ -24,6 +24,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -36,6 +37,7 @@ import java.util.List;
 
 import static java.lang.Math.*;
 import static javafx.scene.paint.Color.rgb;
+
 
 @JsonDeserialize(converter = Street.StreetConstruct.class)
 public class Street implements Drawable{
@@ -97,7 +99,6 @@ public class Street implements Drawable{
         if(distance>500){dcase = 2;}
         if(distance>700){dcase = 3;}
 
-
         double u1 =  end.getX() - start.getX() ;
         double u2 =  end.getY() - start.getY() ;
 
@@ -111,6 +112,7 @@ public class Street implements Drawable{
         double result = toDegrees(b);
         double offsetx =0;
         double offsety = 0;
+
         if(u1<0 && u2>0) {
             result =result+180;
             offsetx= 0;
@@ -158,13 +160,10 @@ public class Street implements Drawable{
             @Override
             public void handle(MouseEvent evemt) {
                 Stage popupwindow=new Stage();
-
                 popupwindow.initModality(Modality.APPLICATION_MODAL);
                 popupwindow.setTitle("This is a pop up window");
 
-
                 Label label1= new Label("Vyberte uroven zatizeni ulice");
-
                 Button button= new Button("Uroven 0");
                 Button button1= new Button("Uroven 1");
                 Button button2= new Button("Uroven 2");
@@ -175,7 +174,6 @@ public class Street implements Drawable{
                                 urovenzatizeni=0.0;
                                 line2.setStroke(rgb(75,75,75));
                                 popupwindow.close();
-
                             }
                         });
                 button1.addEventHandler(MouseEvent.MOUSE_CLICKED,
@@ -184,7 +182,6 @@ public class Street implements Drawable{
                                 urovenzatizeni=1.0;
                                 line2.setStroke(Color.YELLOW);
                                 popupwindow.close();
-
                             }
                         });
                 button2.addEventHandler(MouseEvent.MOUSE_CLICKED,
@@ -193,7 +190,6 @@ public class Street implements Drawable{
                                 urovenzatizeni=2.0;
                                 line2.setStroke(Color.ORANGE);
                                 popupwindow.close();
-
                             }
                         });
                 button3.addEventHandler(MouseEvent.MOUSE_CLICKED,
@@ -202,20 +198,13 @@ public class Street implements Drawable{
                                 urovenzatizeni= 3.0;
                                 line2.setStroke(Color.RED);
                                 popupwindow.close();
-
                             }
                         });
                 VBox layout= new VBox(10);
-
-
                 layout.getChildren().addAll(label1,button, button1,button2,button3);
-
                 layout.setAlignment(Pos.CENTER);
-
                 Scene scene1= new Scene(layout, 300, 250);
-
                 popupwindow.setScene(scene1);
-
                 popupwindow.showAndWait();
             }
         });
@@ -225,7 +214,6 @@ public class Street implements Drawable{
         Text text3 = new Text(0,0,name);
         Text text4= new Text(0,0,name);
 
-
         double setx,sety,setx2,sety2,setx3,sety3,setx4,sety4=0;
         double sirka=text.getBoundsInLocal().getWidth();
         double offsetsirka= (sirka/2);
@@ -233,6 +221,7 @@ public class Street implements Drawable{
             case 1:
                 text.setX(((start.getX()+end.getX())/2)-offsetsirka+offsetx);
                 text.setY(((start.getY()+end.getY())/2)+offsety);
+
                 text.setRotate(result);
                 text.setStroke(Color.WHITE);
                 return Arrays.asList(line2,line,text,clickable);
@@ -257,7 +246,6 @@ public class Street implements Drawable{
                 text.setRotate(result);
                 text.setStroke(Color.WHITE);
 
-
                 setx2=((start.getX()+end.getX())/2);
                 sety2=((start.getY()+end.getY())/2);
 
@@ -273,12 +261,10 @@ public class Street implements Drawable{
                 setx2=((setx+setx4)/2);
                 sety2=((sety4+sety)/2);
 
-
                 text2.setX(setx2-offsetsirka+offsetx);
                 text2.setY(sety2+offsety);
                 text2.setRotate(result);
                 text2.setStroke(Color.WHITE);
-
                 return Arrays.asList(line2,line,text,text2,clickable);
             case 3:
                 setx=((start.getX()+end.getX())/2);
@@ -302,11 +288,7 @@ public class Street implements Drawable{
                 text3.setRotate(result);
                 text3.setStroke(Color.WHITE);
                 return Arrays.asList(line2,line,text,text2,text3,clickable);
-
         }
-
-
-
         return Arrays.asList(line2,line,text);
 
     }
