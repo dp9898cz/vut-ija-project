@@ -1,25 +1,22 @@
 package ija_project;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 public class Controller {
@@ -36,6 +33,7 @@ public class Controller {
     private Timer timer;
 
 
+
     private LocalTime time = LocalTime.now();
     private final List<TimerMapUpdate> elementsUpdate = new ArrayList<>();
     private final List<Vehicle> vehicles = new ArrayList<>();
@@ -50,6 +48,7 @@ public class Controller {
     private static final double MAX_SCALE = 5;
     private static final double MIN_SCALE = -10;
     public  double zoomhandler = 0;
+
 
     @FXML
     private void searchAction() {
@@ -161,40 +160,31 @@ public class Controller {
     }
 
 
-    private LocalTime getPastStartTime(Vehicle v) {
-        LocalTime fakeTime = time.truncatedTo(ChronoUnit.MINUTES);
-        for (int i = 0; i < 4; i++) {
-            fakeTime = fakeTime.minusMinutes(i);
-            if (((fakeTime.getMinute() == v.getStartMinute()) || (((fakeTime.getMinute() - v.getStartMinute()) % v.getGoEveryXMinute()) == 0))) {
-                return fakeTime;
+    public String getLineInfo(Vehicle v) {
+        String completed = "";
+        // first get list of stops
+        List<Stop> stopsList = new ArrayList<>();
+        for (Coordinate c : v.getPath().getPath()) {
+            // decide whether the stop is real stop
+            if (stops.contains(c)) stopsList.add(allStops.get(stops.indexOf(c)));
+        }
+
+        // now I have all stops in variable stopList
+        for (int i = 1; i < stopsList.size(); i++) {
+            String line = Integer.toString(i);
+            line += ".\t";
+            LocalTime time = v.getStartTime();
+            time = time.truncatedTo(ChronoUnit.SECONDS);
+            for (int j = 0; j < i; j++) {
+                time = time.plusSeconds(v.getStopsTimes().get(j));
             }
+            line += time.toString(); //get scheduled time
+            line += "\t";
+            line += "Nejake jmeno zastavky";
+            line += "\n";
+            completed = completed.concat(line);
         }
-        return null;
-    }
-
-    private void generateVehiclesOnTheRoad() {
-        for (Vehicle v: vehicles) {
-            LocalTime startTime = getPastStartTime(v); // start time
-            if (startTime == null) return;
-            long timePassedSinceStart = Math.abs(Duration.between(time, startTime).toMillis()) / 1000; // seconds on the run
-            long pathLengthInSeconds = v.getPathLengthInSeconds();
-            double driven = ((double) timePassedSinceStart) / pathLengthInSeconds; // % driven length
-            double distanceDriven = driven * v.getPath().getPathDistance(); // distance
-            Coordinate currentPos = v.getPath().getDistanceCoordinate(distanceDriven, v); // current position
-            Integer stopsPassed = v.findOutHowManyStopsPassedAlready((int) timePassedSinceStart);
-            Coordinate LastStop = v.findOutLastStop((int) timePassedSinceStart);
-
-            //generate
-            Vehicle vv = new Vehicle(currentPos, v.getSpeed(), v.getPath(), v.getStopsTimes(), v.getGoEveryXMinute(), v.getStartMinute());
-            vv.setStopsPassed(stopsPassed);
-            vv.setLastStop(LastStop);
-            vv.setStartTime(startTime);
-            vv.setDistance(distanceDriven);
-
-            //add it to gui
-            elementsUpdate.add(vv);
-            mapContent.getChildren().addAll(vv.getGui());
-        }
+        return completed;
     }
 
 
@@ -213,18 +203,6 @@ public class Controller {
                 mapContent.getChildren().addAll(d.getGui());
             }
         }
-
-        // add stops to the all vehicles paths
-        for (Stop s : allStops) {
-            for (Vehicle v : vehicles) {
-                if (v.getPath().getPath().contains(s.getCoordinates())) {
-                    v.getPath().getStopList().add(s);
-                }
-            }
-        }
-
-        // there generate todo vehicles on the road
-        generateVehiclesOnTheRoad();
     }
 
     int counter = 0;
@@ -338,4 +316,25 @@ public class Controller {
     }
 
 
+    public void ClickLayout2Button(ActionEvent actionEvent) {
+        Street.urovenzatizeni = 1.0;
+
+    }
+
+    public void ClickLayout2Button1(ActionEvent actionEvent) {
+        Street.urovenzatizeni = 2.0;
+
+    }
+
+    public void ClickLayout2Button2(ActionEvent actionEvent) {
+        Street.urovenzatizeni = 3.0;
+
+    }
+
+    public void ClickLayout2Button3(ActionEvent actionEvent) {
+        Street.urovenzatizeni = 4.0;
+    }
+    public Double getUrovenzatizeni(){
+        return Street.urovenzatizeni;
+    }
 }
