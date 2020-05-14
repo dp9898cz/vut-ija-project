@@ -106,6 +106,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         this.gui.add(new Circle(position.getX(), position.getY(), 10, color));
         Text text = new Text(position.getX()-6, position.getY()+5, this.path.getNumber());
         this.gui.add(text);
+        if (color == Color.DARKGREEN || color == Color.BLUE) text.setFill(Color.WHITE);
         Circle circle=new Circle(position.getX(), position.getY(), 12, rgb(0,0,0,0));
         this.gui.add(circle);
 
