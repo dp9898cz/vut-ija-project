@@ -1,9 +1,11 @@
 package ija_project;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
@@ -25,6 +27,7 @@ public class Controller {
     public TextField searchbox ;
     @FXML
     public Button searchbutton;
+
     @FXML
     private Timer timer;
 
@@ -76,7 +79,18 @@ public class Controller {
         mapContent.layout();
 
     }
+    @FXML
+    private void onTimeStart(){
+            timer(1);
+    }
+    @FXML
+    private void onTimeStop(){
+        timer.cancel();
+    }
+    @FXML
+    private void OnTimeReset(){
 
+    }
     @FXML
     private void onScaleChange() {
         try {
@@ -261,4 +275,6 @@ public class Controller {
         Platform.exit();
         System.exit(0);
     }
+
+
 }

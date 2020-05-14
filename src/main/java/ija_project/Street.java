@@ -128,6 +128,8 @@ public class Street implements Drawable{
             offsety= 3;
         }
         //-------------------
+
+        //-------------------
         Text text = new Text(0,0,name);
         Text text2 = new Text(0,0,name);
         Text text3 = new Text(0,0,name);
