@@ -1,5 +1,18 @@
 package ija_project;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -11,15 +24,22 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import static java.lang.Math.*;
+import static javafx.scene.paint.Color.rgb;
 
 @JsonDeserialize(converter = Street.StreetConstruct.class)
 public class Street implements Drawable{
+    public static double urovenzatizeni;
     private Coordinate start;
     private Coordinate end;
     private String name;
@@ -40,7 +60,6 @@ public class Street implements Drawable{
             s.setStreet(this);
         }
     }
-
     public Coordinate getStart() {
         return start;
     }
@@ -130,10 +149,83 @@ public class Street implements Drawable{
         //-------------------
 
         //-------------------
+        Line clickable = new Line(start.getX(), start.getY(), end.getX(), end.getY());
+        clickable.setStroke(Color.rgb(75,75,75,0));
+        clickable.setStrokeWidth(20);
+        clickable.setStrokeLineCap(StrokeLineCap.ROUND);
+        clickable.setOnMousePressed(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent evemt) {
+                Stage popupwindow=new Stage();
+
+                popupwindow.initModality(Modality.APPLICATION_MODAL);
+                popupwindow.setTitle("This is a pop up window");
+
+
+                Label label1= new Label("Vyberte uroven zatizeni ulice");
+
+                Button button= new Button("Uroven 0");
+                Button button1= new Button("Uroven 1");
+                Button button2= new Button("Uroven 2");
+                Button button3= new Button("Uroven 3");
+                button.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                        new EventHandler<MouseEvent>() {
+                            @Override public void handle(MouseEvent e) {
+                                urovenzatizeni=0.0;
+                                line2.setStroke(rgb(75,75,75));
+                                popupwindow.close();
+
+                            }
+                        });
+                button1.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                        new EventHandler<MouseEvent>() {
+                            @Override public void handle(MouseEvent e) {
+                                urovenzatizeni=1.0;
+                                line2.setStroke(Color.YELLOW);
+                                popupwindow.close();
+
+                            }
+                        });
+                button2.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                        new EventHandler<MouseEvent>() {
+                            @Override public void handle(MouseEvent e) {
+                                urovenzatizeni=2.0;
+                                line2.setStroke(Color.ORANGE);
+                                popupwindow.close();
+
+                            }
+                        });
+                button3.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                        new EventHandler<MouseEvent>() {
+                            @Override public void handle(MouseEvent e) {
+                                urovenzatizeni= 3.0;
+                                line2.setStroke(Color.RED);
+                                popupwindow.close();
+
+                            }
+                        });
+                VBox layout= new VBox(10);
+
+
+                layout.getChildren().addAll(label1,button, button1,button2,button3);
+
+                layout.setAlignment(Pos.CENTER);
+
+                Scene scene1= new Scene(layout, 300, 250);
+
+                popupwindow.setScene(scene1);
+
+                popupwindow.showAndWait();
+            }
+        });
+        //-------------------------------------
         Text text = new Text(0,0,name);
         Text text2 = new Text(0,0,name);
         Text text3 = new Text(0,0,name);
         Text text4= new Text(0,0,name);
+
+
         double setx,sety,setx2,sety2,setx3,sety3,setx4,sety4=0;
         double sirka=text.getBoundsInLocal().getWidth();
         double offsetsirka= (sirka/2);
@@ -143,7 +235,7 @@ public class Street implements Drawable{
                 text.setY(((start.getY()+end.getY())/2)+offsety);
                 text.setRotate(result);
                 text.setStroke(Color.WHITE);
-                return Arrays.asList(line2,line,text);
+                return Arrays.asList(line2,line,text,clickable);
             case 2:
                 setx=((start.getX()+end.getX())/2);
                 sety=((start.getY()+end.getY())/2);
@@ -187,7 +279,7 @@ public class Street implements Drawable{
                 text2.setRotate(result);
                 text2.setStroke(Color.WHITE);
 
-                return Arrays.asList(line2,line,text,text2);
+                return Arrays.asList(line2,line,text,text2,clickable);
             case 3:
                 setx=((start.getX()+end.getX())/2);
                 sety=((start.getY()+end.getY())/2);
@@ -209,7 +301,7 @@ public class Street implements Drawable{
                 text3.setY(sety3+offsety);
                 text3.setRotate(result);
                 text3.setStroke(Color.WHITE);
-                return Arrays.asList(line2,line,text,text2,text3);
+                return Arrays.asList(line2,line,text,text2,text3,clickable);
 
         }
 

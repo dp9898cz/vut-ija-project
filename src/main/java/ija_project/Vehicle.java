@@ -19,7 +19,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -69,30 +68,6 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         setGui();
     }
 
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    @JsonIgnore
-    public String getLineInfo() {
-        String completed = "";
-        // now I have all stops in variable path.stopList
-        for (int i = 1; i < this.getPath().getStopList().size(); i++) {
-            String line = Integer.toString(i);
-            line += ".\t";
-            LocalTime time = this.getStartTime();
-            time = time.truncatedTo(ChronoUnit.SECONDS);
-            for (int j = 0; j < i; j++) {
-                time = time.plusSeconds(this.getStopsTimes().get(j));
-            }
-            line += time.toString(); //get scheduled time
-            line += "\t";
-            line += "Nejake jmeno zastavky";
-            line += "\n";
-            completed = completed.concat(line);
-        }
-        return completed;
-    }
 
 
     public Tooltip hackTooltipStartTiming(Tooltip tooltip) {
@@ -131,7 +106,6 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         this.gui.add(new Circle(position.getX(), position.getY(), 10, color));
         Text text = new Text(position.getX()-6, position.getY()+5, this.path.getNumber());
         this.gui.add(text);
-        if (color == Color.DARKGREEN || color == Color.BLUE) text.setFill(Color.WHITE);
         Circle circle=new Circle(position.getX(), position.getY(), 12, rgb(0,0,0,0));
         this.gui.add(circle);
 
@@ -189,45 +163,6 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         this.number = this.path.getNumber();
     }
 
-    @JsonIgnore
-    public long getPathLengthInSeconds() {
-        long total = 0;
-        for (Integer i : stopsTimes) {
-            total += i;
-        }
-        return total;
-    }
-
-    @JsonIgnore
-    public Integer findOutHowManyStopsPassedAlready(Integer currentTimePassed) {
-        Integer handle = 0;
-        Integer counter = 0;
-        for (Integer i : stopsTimes) {
-            handle += i;
-            if (handle <= currentTimePassed) {
-                counter++;
-            }
-            else {
-                break;
-            }
-        }
-        return counter;
-    }
-
-    @JsonIgnore
-    public Coordinate findOutLastStop(Integer currentTimePassed) {
-        Integer lastStop = 0;
-        Integer handle = 0;
-        for (Integer i : stopsTimes) {
-            handle += i;
-            if (handle >= currentTimePassed || currentTimePassed <= stopsTimes.get(0))
-                break;
-            else
-                lastStop++;
-        }
-        return path.getStopList().get(lastStop).getCoordinates();
-    }
-
     // move the bus
     private void move(Coordinate c) {
         for (Shape s : gui) {
@@ -245,7 +180,6 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     @Override
     public void update(LocalTime l) {
         Platform.runLater(() -> {
-
                 distance += speed;
                 //System.out.println(String.format("distance: %f, vzdálenost: %f", path.getPathDistance(), distance));
                 Coordinate c;
