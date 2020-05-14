@@ -32,6 +32,8 @@ public class Controller {
     @FXML
     private Timer timer;
     private LocalTime time = LocalTime.now();
+    private LocalTime timeTemp = LocalTime.now();
+
     private final List<TimerMapUpdate> elementsUpdate = new ArrayList<>();
     private final List<Vehicle> vehicles = new ArrayList<>();
     private final List<Coordinate> stops = new ArrayList<>();
@@ -206,6 +208,18 @@ public class Controller {
                 mapContent.getChildren().addAll(d.getGui());
             }
         }
+
+        // add stops to the all vehicles paths
+        for (Stop s : allStops) {
+            for (Vehicle v : vehicles) {
+                if (v.getPath().getPath().contains(s.getCoordinates())) {
+                    v.getPath().getStopList().add(s);
+                }
+            }
+        }
+
+        // there generate vehicles on the road
+        generateVehiclesOnTheRoad();
     }
 
     int counter = 0;
@@ -245,6 +259,8 @@ public class Controller {
                         long timePassedSinceStart = 0;
                         long scheduledTime = 0;
 
+
+
                         for (int i = 0; i < v.getStopsPassed() - 1; i++) {
                             scheduledTime += v.getStopsTimes().get(i);
                         }
@@ -258,11 +274,14 @@ public class Controller {
 
                         // set the time passed variable
                         if (timeStart != null) {
-                            timePassedSinceStart = Duration.between(timeStart, time).toMillis() / 1000;
+                            if (timeStart.isBefore(timeTemp)) {
+                                    scheduledTime += v.getStopsTimes().get(0);
+                            }
+                            timePassedSinceStart = Math.abs(Duration.between(timeStart, time).toMillis()) / 1000;
                         }
 
                         //DEBUG todo
-                        if (v.getNumber().equals("11")) {
+                        if (v.getNumber().equals("44")) {
                             //System.out.println(String.format("%s: passed: %d scheduled: %d", v.getNumber(), timePassedSinceStart, scheduledTime));
                             //System.out.println(getLineInfo(v));
                         }
