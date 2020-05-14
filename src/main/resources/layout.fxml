@@ -5,9 +5,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -29,19 +27,15 @@
    <right>
       <AnchorPane prefHeight="400.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="69.0" layoutY="67.0" mnemonicParsing="false" onAction="#onScaleChange" text="Použít" />
-            <Text layoutX="17.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Změnit rychlost animace (1-10):" />
-            <TextField fx:id="scaleTextField" alignment="BOTTOM_RIGHT" layoutX="18.0" layoutY="35.0" prefHeight="25.0" prefWidth="150.0" promptText="1" />
-            <Button layoutX="68.0" layoutY="219.0" mnemonicParsing="false" text="Použít" />
-            <Text layoutX="60.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Změnit čas " wrappingWidth="64.853515625" />
-            <Slider layoutX="23.0" layoutY="193.0" prefHeight="15.0" prefWidth="150.0" />
-            <ProgressBar layoutX="21.0" layoutY="152.0" prefHeight="15.0" prefWidth="150.0" progress="0.0" />
-            <TextField fx:id="Timer" alignment="BOTTOM_RIGHT" layoutX="24.0" layoutY="275.0" />
-            <TextField fx:id="Timer_update" alignment="BOTTOM_RIGHT" layoutX="21.0" layoutY="335.0" prefHeight="20.0" prefWidth="152.0" />
-            <Text layoutX="81.0" layoutY="264.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Čas" />
-            <Text layoutX="85.0" layoutY="326.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer" />
-            <TextField fx:id="searchbox" alignment="BOTTOM_LEFT" layoutX="24.0" layoutY="404.0" />
-            <Button fx:id="searchbutton" layoutX="118.0" layoutY="444.0" mnemonicParsing="false" onAction="#searchAction" text="Search" />
+            <Button layoutX="144.0" layoutY="457.0" mnemonicParsing="false" onAction="#onScaleChange" text="Použít" />
+            <Text layoutX="16.0" layoutY="444.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Změnit rychlost animace (1-10):" />
+            <TextField fx:id="scaleTextField" alignment="BOTTOM_RIGHT" layoutX="8.0" layoutY="457.0" prefHeight="25.0" prefWidth="129.0" promptText="1" />
+            <TextField fx:id="Timer" alignment="CENTER_LEFT" layoutX="63.0" layoutY="502.0" prefHeight="25.0" prefWidth="129.0" />
+            <TextField fx:id="Timer_update" alignment="CENTER" layoutX="64.0" layoutY="536.0" prefHeight="25.0" prefWidth="128.0" />
+            <Text layoutX="24.0" layoutY="522.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Čas" />
+            <Text layoutX="24.0" layoutY="553.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer" />
+            <TextField fx:id="searchbox" alignment="BOTTOM_LEFT" layoutX="5.0" layoutY="34.0" prefHeight="25.0" prefWidth="130.0" />
+            <Button fx:id="searchbutton" layoutX="140.0" layoutY="34.0" mnemonicParsing="false" onAction="#searchAction" prefHeight="25.0" prefWidth="56.0" text="Search" />
          </children>
       </AnchorPane>
    </right>
@@ -50,9 +44,9 @@
         <menus>
           <Menu mnemonicParsing="false" text="Operate">
             <items>
-              <MenuItem mnemonicParsing="false" text="Start" />
-                  <MenuItem mnemonicParsing="false" text="Pause" />
-                  <MenuItem mnemonicParsing="false" text="Reset" />
+              <MenuItem fx:id="TimeStart" mnemonicParsing="false" onAction="#onTimeStart" text="Start" />
+                  <MenuItem fx:id="TimeStop" mnemonicParsing="false" onAction="#onTimeStop" text="Pause" />
+                  <MenuItem fx:id="TimeReset" mnemonicParsing="false" onAction="#OnTimeReset" text="Reset" />
                   <MenuItem mnemonicParsing="false" onAction="#onCloseapp" text="Close" />
             </items>
           </Menu>
