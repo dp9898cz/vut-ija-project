@@ -6,6 +6,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -18,7 +19,7 @@
          <content>
             <Group>
                <children>
-                  <Pane fx:id="mapContent" layoutX="-8.0" layoutY="6.0" maxHeight="1000.0" maxWidth="1000.0" onScroll="#onScroll" prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-color: rgb(0,190,0);" />
+                  <Pane fx:id="mapContent" layoutX="-8.0" layoutY="6.0" maxHeight="1100.0" maxWidth="1100.0" onScroll="#onScroll" prefHeight="1100.0" prefWidth="1100.0" style="-fx-background-color: rgb(0,190,0);" />
                </children>
             </Group>
          </content>
@@ -36,6 +37,7 @@
             <Text layoutX="24.0" layoutY="553.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer" />
             <TextField fx:id="searchbox" alignment="BOTTOM_LEFT" layoutX="5.0" layoutY="34.0" prefHeight="25.0" prefWidth="130.0" />
             <Button fx:id="searchbutton" layoutX="140.0" layoutY="34.0" mnemonicParsing="false" onAction="#searchAction" prefHeight="25.0" prefWidth="56.0" text="Search" />
+            <TextArea fx:id="textArea" layoutX="5.0" layoutY="71.0" prefHeight="346.0" prefWidth="190.0" />
          </children>
       </AnchorPane>
    </right>

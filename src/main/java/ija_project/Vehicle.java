@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.util.StdConverter;
 
 import javafx.application.Platform;
+import javafx.geometry.Pos;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -12,6 +14,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.TextFlow;
 import javafx.stage.PopupWindow;
 import javafx.util.Duration;
 import javafx.event.EventHandler;
@@ -34,7 +37,6 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     private List<Integer> stopsTimes; // list of times at stops
     private int goEveryXMinute = 2; // go every 2 minutes
     private int startMinute = 1; // start every :01 :03 :05 atd
-
     @JsonIgnore
     private int stopsPassed = 0;
     @JsonIgnore
@@ -43,13 +45,10 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     private LocalTime startTime = null;
     @JsonIgnore
     private double distance = 0;
-
     @JsonIgnore
     private List<Shape> gui;
-
     @JsonIgnore
     private String number = "";
-
     @JsonIgnore
     private static final String SQUARE_BUBBLE = "M24 1h-24v16.981h4v5.019l7-5.019h13z";
 
@@ -67,8 +66,6 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         setNumber();
         setGui();
     }
-
-
 
     public Tooltip hackTooltipStartTiming(Tooltip tooltip) {
         tooltip.setStyle("-fx-font-size: 16px; -fx-shape: \"" + SQUARE_BUBBLE + "\";");
@@ -123,7 +120,13 @@ public class Vehicle implements Drawable, TimerMapUpdate {
             first_coordinate = coordinate_end;
             lines.add(line);
         }
+        circle.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                Controller.PrintigLineInfo("ahoj");
 
+            }
+        });
         circle.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
@@ -154,9 +157,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         while(iterator3.hasNext()){
             Line line = iterator3.next();
             this.gui.add(line);
-
         }
-
     }
 
     private void setNumber() {
