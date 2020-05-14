@@ -262,7 +262,7 @@ public class Controller {
                         //DEBUG todo
                         if (v.getNumber().equals("11")) {
                             //System.out.println(String.format("%s: passed: %d scheduled: %d", v.getNumber(), timePassedSinceStart, scheduledTime));
-                            System.out.println(getLineInfo(v));
+                            //System.out.println(getLineInfo(v));
                         }
 
                         // bus got to the Stop -> change lastStop (and quit for next calculation of scheduled Time)
@@ -290,12 +290,17 @@ public class Controller {
                     }
 
                 });
+                Platform.runLater(() -> {
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                     LocalDateTime now = LocalDateTime.now();
                     Timer.setText(dtf.format(now));
                     counter++;
                     String s=String.valueOf(counter);
                     Timer_update.setText(s);
+                }
+
+                );
+
             }
         }, 0, (long) (1000 / scale));
     }
