@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.util.StdConverter;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.control.Tooltip;
@@ -19,8 +20,11 @@ import javafx.animation.Timeline;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.lang.reflect.Field;
+
+import static javafx.scene.paint.Color.rgb;
 
 @JsonDeserialize(converter = Vehicle.VehicleConstruct.class)
 public class Vehicle implements Drawable, TimerMapUpdate {
@@ -89,23 +93,63 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     public List<Shape> getGui() {
         return gui;
     }
-
     private void setGui() {
         this.gui = new ArrayList<>();
         this.gui.add(new Circle(position.getX(), position.getY(), 12, Color.WHITE));
         this.gui.add(new Circle(position.getX(), position.getY(), 10, Color.RED));
         Text text =new Text(position.getX()-6, position.getY()+5,this.path.getNumber());
         this.gui.add(text);
-        Circle circle=new Circle(position.getX(), position.getY(), 12,Color.rgb(0,0,0,0));
+        Circle circle=new Circle(position.getX(), position.getY(), 12, rgb(0,0,0,0));
         this.gui.add(circle);
+
+        //--------------------------
+        //Lines for lines
+        List <Coordinate> list = path.getPath();
+        Iterator<Coordinate> iterator = list.iterator();
+        Coordinate first_coordinate = list.get(0);
+        ArrayList <Line> lines = new ArrayList<>();
+        while(iterator.hasNext()) {
+            Coordinate coordinate_end = iterator.next();
+            Line line = new Line(first_coordinate.getX(), first_coordinate.getY(), coordinate_end.getX(), coordinate_end.getY());
+            line.setStrokeWidth(5);
+            line.setStroke(rgb(0,0,0,0));
+            first_coordinate = coordinate_end;
+            lines.add(line);
+        }
+
         circle.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
                 Tooltip cassava2 = new Tooltip(path.getNumber());
                 Tooltip.install(circle, hackTooltipStartTiming(cassava2));
                 circle.setStroke(Color.WHITE);
+                Iterator <Line> iterator2 = lines.listIterator();
+                while(iterator2.hasNext()){
+                    Line line = iterator2.next();
+                    line.setStroke(rgb(220,0,0,1));
+
+                }
             }
         });
+        circle.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+
+                Iterator <Line> iterator2 = lines.listIterator();
+                while(iterator2.hasNext()){
+                    Line line = iterator2.next();
+                    line.setStroke(rgb(220,0,0,0));
+
+                }
+            }
+        });
+        Iterator <Line> iterator3 = lines.listIterator();
+        while(iterator3.hasNext()){
+            Line line = iterator3.next();
+            this.gui.add(line);
+
+        }
+
     }
 
     private void setNumber() {
@@ -115,6 +159,11 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     // move the bus
     private void move(Coordinate c) {
         for (Shape s : gui) {
+            Class shape = s.getClass();
+            Line linus = new Line();
+            if( s.getClass() == linus.getClass()){
+                continue;
+            }
             s.setTranslateX((c.getX() - position.getX()) + s.getTranslateX());
             s.setTranslateY((c.getY() - position.getY()) + s.getTranslateY());
         }
