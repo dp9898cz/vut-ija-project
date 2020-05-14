@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
@@ -11,12 +12,16 @@ public class Path {
     private List<Coordinate> path;
     private String number;
 
+    @JsonIgnore
+    private List<Stop> stopList = new ArrayList<>();
+
     private Path(){}
 
     // Constructor
     public Path(List<Coordinate> path, String number) {
         this.path = path;
         this.number = number;
+        setStopList();
     }
 
     @JsonIgnore
@@ -61,6 +66,10 @@ public class Path {
 
         return new Coordinate(x.getX() + (y.getX() - x.getX()) * driven,
                 x.getY() + (y.getY() - x.getY()) * driven);
+    }
+
+    private void setStopList() {
+
     }
 
     public List<Coordinate> getPath() {

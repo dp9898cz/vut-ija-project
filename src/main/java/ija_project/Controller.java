@@ -1,5 +1,6 @@
 package ija_project;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +17,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 public class Controller {
@@ -36,6 +40,7 @@ public class Controller {
     private final List<TimerMapUpdate> elementsUpdate = new ArrayList<>();
     private final List<Vehicle> vehicles = new ArrayList<>();
     private final List<Coordinate> stops = new ArrayList<>();
+    private final List<Stop> allStops = new ArrayList<>();
 
     @FXML
     private TextField scaleTextField;
@@ -156,6 +161,34 @@ public class Controller {
     }
 
 
+    public String getLineInfo(Vehicle v) {
+        String completed = "";
+        // first get list of stops
+        List<Stop> stopsList = new ArrayList<>();
+        for (Coordinate c : v.getPath().getPath()) {
+            // decide whether the stop is real stop
+            if (stops.contains(c)) stopsList.add(allStops.get(stops.indexOf(c)));
+        }
+
+        // now I have all stops in variable stopList
+        for (int i = 1; i < stopsList.size(); i++) {
+            String line = Integer.toString(i);
+            line += ".\t";
+            LocalTime time = v.getStartTime();
+            time = time.truncatedTo(ChronoUnit.SECONDS);
+            for (int j = 0; j < i; j++) {
+                time = time.plusSeconds(v.getStopsTimes().get(j));
+            }
+            line += time.toString(); //get scheduled time
+            line += "\t";
+            line += "Nejake jmeno zastavky";
+            line += "\n";
+            completed = completed.concat(line);
+        }
+        return completed;
+    }
+
+
     public void setElements(List<Drawable> elements) {
         for (Drawable d : elements) {
             if (d.getClass().equals(Vehicle.class)) {
@@ -166,6 +199,7 @@ public class Controller {
             else {
                 if (d.getClass().equals(Stop.class)) {
                     stops.add(((Stop) d).getCoordinates());
+                    allStops.add((Stop) d);
                 }
                 mapContent.getChildren().addAll(d.getGui());
             }
@@ -226,8 +260,9 @@ public class Controller {
                         }
 
                         //DEBUG todo
-                        if (v.getNumber().equals("22")) {
-                            System.out.println(String.format("%s: passed: %d scheduled: %d", v.getNumber(), timePassedSinceStart, scheduledTime));
+                        if (v.getNumber().equals("11")) {
+                            //System.out.println(String.format("%s: passed: %d scheduled: %d", v.getNumber(), timePassedSinceStart, scheduledTime));
+                            System.out.println(getLineInfo(v));
                         }
 
                         // bus got to the Stop -> change lastStop (and quit for next calculation of scheduled Time)
