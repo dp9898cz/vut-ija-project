@@ -60,9 +60,11 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         this.stopsTimes = times;
         this.goEveryXMinute = goEveryXMinute;
         this.startMinute = startMinute;
-        setGui();
         setNumber();
+        setGui();
     }
+
+
 
     public Tooltip hackTooltipStartTiming(Tooltip tooltip) {
         tooltip.setStyle("-fx-font-size: 16px; -fx-shape: \"" + SQUARE_BUBBLE + "\";");
@@ -92,12 +94,19 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     private void setGui() {
         this.gui = new ArrayList<>();
+        Color color = Color.WHITE;
+        if (this.number.startsWith("1")) color = Color.INDIANRED;
+        if (this.number.startsWith("2")) color = Color.DARKGREEN;
+        if (this.number.startsWith("3")) color = Color.ORANGE;
+        if (this.number.startsWith("4")) color = Color.BLUE;
         this.gui.add(new Circle(position.getX(), position.getY(), 12, Color.WHITE));
-        this.gui.add(new Circle(position.getX(), position.getY(), 10, Color.RED));
-        Text text =new Text(position.getX()-6, position.getY()+5,this.path.getNumber());
+        this.gui.add(new Circle(position.getX(), position.getY(), 10, color));
+        Text text = new Text(position.getX()-6, position.getY()+5, this.path.getNumber());
         this.gui.add(text);
-        Circle circle=new Circle(position.getX(), position.getY(), 12,Color.rgb(0,0,0,0));
+        if (color == Color.DARKGREEN || color == Color.BLUE) text.setFill(Color.WHITE);
+        Circle circle=new Circle(position.getX(), position.getY(), 12, Color.rgb(0,0,0,0));
         this.gui.add(circle);
+
         circle.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
@@ -209,8 +218,8 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
         @Override
         public Vehicle convert(Vehicle value) {
-            value.setGui();
             value.setNumber();
+            value.setGui();
             return value;
         }
     }
