@@ -81,9 +81,9 @@
       </AnchorPane>
    </right>
    <top>
-      <HBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="800.0" BorderPane.alignment="TOP_RIGHT">
+      <HBox alignment="TOP_RIGHT" prefHeight="32.0" prefWidth="800.0" BorderPane.alignment="TOP_RIGHT">
          <children>
-            <GridPane id="Gridstyle" alignment="TOP_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="1345.0" HBox.hgrow="ALWAYS">
+            <GridPane id="Gridstyle" alignment="TOP_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="20.0" prefWidth="800.0" HBox.hgrow="ALWAYS">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -92,7 +92,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
               </rowConstraints>
                <children>
-                  <Button id="XButton" fx:id="XButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onCloseApp" prefHeight="20.0" prefWidth="40.0" styleClass="XButton" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+                  <Button id="XButton" fx:id="XButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onCloseApp" prefHeight="30.0" prefWidth="40.0" styleClass="XButton" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
                      <GridPane.margin>
                         <Insets top="1.0" />
                      </GridPane.margin>
@@ -100,40 +100,40 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button id="help" alignment="CENTER" mnemonicParsing="false" onAction="#onHelp" prefHeight="50.0" prefWidth="120.0" text="Nápověda">
+                  <Button id="help" alignment="CENTER" mnemonicParsing="false" onAction="#onHelp" prefHeight="20.0" prefWidth="120.0" text="Nápověda">
                      <GridPane.margin>
                         <Insets bottom="1.0" left="240.0" />
                      </GridPane.margin>
                      <font>
-                        <Font size="18.0" />
+                        <Font size="14.0" />
                      </font>
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button id="pause" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#OnPause" prefHeight="50.0" prefWidth="120.0" text="Pauza">
+                  <Button id="pause" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#OnPause" prefHeight="25.0" prefWidth="120.0" text="Pauza">
                      <GridPane.margin>
                         <Insets bottom="1.0" left="120.0" right="50.0" />
                      </GridPane.margin>
                      <font>
-                        <Font size="18.0" />
+                        <Font size="14.0" />
                      </font>
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button id="start" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#OnStart" prefHeight="50.0" prefWidth="120.0" text="Start">
+                  <Button id="start" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#OnStart" prefHeight="25.0" prefWidth="120.0" text="Start">
                      <GridPane.margin>
                         <Insets bottom="1.0" />
                      </GridPane.margin>
                      <font>
-                        <Font size="18.0" />
+                        <Font size="14.0" />
                      </font>
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button id="MAXButton" fx:id="MaxButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onMinimaze" prefHeight="25.0" prefWidth="40.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+                  <Button id="MAXButton" fx:id="MaxButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onMinimaze" prefHeight="30.0" prefWidth="40.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
                      <GridPane.margin>
                         <Insets right="40.0" top="1.0" />
                      </GridPane.margin>
