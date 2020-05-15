@@ -5,27 +5,18 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.util.StdConverter;
 
 import javafx.application.Platform;
-import javafx.geometry.Pos;
-import javafx.scene.layout.VBox;
+import javafx.scene.AccessibleRole;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.text.TextFlow;
-import javafx.stage.PopupWindow;
-import javafx.util.Duration;
-import javafx.event.EventHandler;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.lang.reflect.Field;
 
 import static javafx.scene.paint.Color.rgb;
 
@@ -50,7 +41,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     @JsonIgnore
     private String number = "";
     @JsonIgnore
-    private static final String SQUARE_BUBBLE = "M24 1h-24v16.981h4v5.019l7-5.019h13z";
+    private Street currentStreet;
 
     // Default constructor for Jackson
     private Vehicle(){}
@@ -67,44 +58,78 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         setGui();
     }
 
-    public Tooltip hackTooltipStartTiming(Tooltip tooltip) {
-        tooltip.setStyle("-fx-font-size: 16px; -fx-shape: \"" + SQUARE_BUBBLE + "\";");
-        tooltip.setAnchorLocation(PopupWindow.AnchorLocation.WINDOW_BOTTOM_LEFT);
-
-        try {
-            Field fieldBehavior = tooltip.getClass().getDeclaredField("BEHAVIOR");
-            fieldBehavior.setAccessible(true);
-            Object objBehavior = fieldBehavior.get(tooltip);
-
-            Field fieldTimer = objBehavior.getClass().getDeclaredField("activationTimer");
-            fieldTimer.setAccessible(true);
-            Timeline objTimer = (Timeline) fieldTimer.get(objBehavior);
-
-            objTimer.getKeyFrames().clear();
-            objTimer.getKeyFrames().add(new KeyFrame(new Duration(1)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return tooltip;
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
+
+    @JsonIgnore
+    public String getLineInfo() {
+        String completed = "";
+        // now I have all stops in variable path.stopList
+        for (int i = 1; i < this.getPath().getStopList().size(); i++) {
+            String line = Integer.toString(i);
+            line += ".\t";
+            LocalTime time = this.getStartTime();
+            time = time.truncatedTo(ChronoUnit.SECONDS);
+            for (int j = 0; j < i; j++) {
+                time = time.plusSeconds(this.getStopsTimes().get(j));
+            }
+            line += time.toString(); //get scheduled time
+            line += "\t";
+            line += "Nejake jmeno zastavky";
+            line += "\n";
+            completed = completed.concat(line);
+        }
+        return completed;
+    }
+
+    @JsonIgnore
+    public long getPathLengthInSeconds() {
+        long total = 0;
+        for (Integer i : stopsTimes) {
+            total += i;
+        }
+        return total;
+    }
+
+    @JsonIgnore
+    public Integer findOutHowManyStopsPassedAlready(Integer currentTimePassed) {
+        Integer handle = 0;
+        Integer counter = 0;
+        for (Integer i : stopsTimes) {
+            handle += i;
+            if (handle <= currentTimePassed) {
+                counter++;
+            }
+            else {
+                break;
+            }
+        }
+        return counter;
+    }
+
+    @JsonIgnore
+    public Coordinate findOutLastStop(Integer currentTimePassed) {
+        int lastStop = 0;
+        int handle = 0;
+        for (Integer i : stopsTimes) {
+            handle += i;
+            if (handle >= currentTimePassed || currentTimePassed <= stopsTimes.get(0))
+                break;
+            else
+                lastStop++;
+        }
+        return path.getStopList().get(lastStop).getCoordinates();
+    }
+
 
     @Override
     public List<Shape> getGui() {
         return gui;
     }
+
     private void setGui() {
         this.gui = new ArrayList<>();
-        Color color = Color.WHITE;
-        if (this.number.startsWith("1")) color = Color.INDIANRED;
-        if (this.number.startsWith("2")) color = Color.DARKGREEN;
-        if (this.number.startsWith("3")) color = Color.ORANGE;
-        if (this.number.startsWith("4")) color = Color.BLUE;
-        this.gui.add(new Circle(position.getX(), position.getY(), 12, Color.WHITE));
-        this.gui.add(new Circle(position.getX(), position.getY(), 10, color));
-        Text text = new Text(position.getX()-6, position.getY()+5, this.path.getNumber());
-        this.gui.add(text);
-        Circle circle=new Circle(position.getX(), position.getY(), 12, rgb(0,0,0,0));
-        this.gui.add(circle);
 
         //--------------------------
         //Lines for lines
@@ -116,62 +141,65 @@ public class Vehicle implements Drawable, TimerMapUpdate {
             Coordinate coordinate_end = iterator.next();
             Line line = new Line(first_coordinate.getX(), first_coordinate.getY(), coordinate_end.getX(), coordinate_end.getY());
             line.setStrokeWidth(5);
+            line.setAccessibleRole(AccessibleRole.RADIO_MENU_ITEM);
             line.setStroke(rgb(0,0,0,0));
             first_coordinate = coordinate_end;
             lines.add(line);
         }
-        circle.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {
-                Controller.PrintigLineInfo("ahoj");
 
-            }
-        });
-        circle.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {
-                Tooltip cassava2 = new Tooltip(path.getNumber());
-                Tooltip.install(circle, hackTooltipStartTiming(cassava2));
-                circle.setStroke(Color.WHITE);
-                Iterator <Line> iterator2 = lines.listIterator();
-                while(iterator2.hasNext()){
-                    Line line = iterator2.next();
-                    line.setStroke(rgb(220,0,0,1));
+        this.gui.addAll(lines);
 
-                }
-            }
-        });
-        circle.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {
-
-                Iterator <Line> iterator2 = lines.listIterator();
-                while(iterator2.hasNext()){
-                    Line line = iterator2.next();
-                    line.setStroke(rgb(220,0,0,0));
-
-                }
-            }
-        });
-        Iterator <Line> iterator3 = lines.listIterator();
-        while(iterator3.hasNext()){
-            Line line = iterator3.next();
-            this.gui.add(line);
-        }
+        Color color = Color.WHITE;
+        if (this.number.startsWith("1")) color = Color.INDIANRED;
+        if (this.number.startsWith("2")) color = Color.DARKGREEN;
+        if (this.number.startsWith("3")) color = Color.ORANGE;
+        if (this.number.startsWith("4")) color = Color.BLUE;
+        this.gui.add(new Circle(position.getX(), position.getY(), 12, Color.WHITE));
+        this.gui.add(new Circle(position.getX(), position.getY(), 10, color));
+        Text text = new Text(position.getX()-6, position.getY()+5, this.path.getNumber());
+        if (color == Color.DARKGREEN || color == Color.BLUE) text.setFill(Color.WHITE);
+        this.gui.add(text);
+        Circle circle=new Circle(position.getX(), position.getY(), 12, rgb(0,0,0,0));
+        this.gui.add(circle);
+        circle.setAccessibleRole(AccessibleRole.RADIO_BUTTON);
     }
 
     private void setNumber() {
         this.number = this.path.getNumber();
     }
 
+    private void setCurrentStreet() {
+        Street lastStreet = null;
+        Street nextStreet;
+        try {
+          lastStreet = this.getPath().getStopList().get(stopsPassed -1 ).getStreet();
+          nextStreet = this.getPath().getStopList().get(stopsPassed ).getStreet();
+        }
+        catch (IndexOutOfBoundsException e) {
+            this.currentStreet = lastStreet;
+            return;
+        }
+
+        if (path.getDistance(lastStreet.getStart(), this.getPosition()) +
+                path.getDistance(this.getPosition(), lastStreet.getEnd()) ==
+                path.getDistance(lastStreet.getStart(), lastStreet.getEnd())) {
+            this.currentStreet = lastStreet;
+        }
+        else if (path.getDistance(nextStreet.getStart(), this.getPosition()) +
+                path.getDistance(this.getPosition(), nextStreet.getEnd()) ==
+                path.getDistance(nextStreet.getStart(), nextStreet.getEnd())) {
+            this.currentStreet = nextStreet;
+        }
+        else {
+            this.currentStreet = nextStreet;
+        }
+    }
+
+
     // move the bus
     private void move(Coordinate c) {
         for (Shape s : gui) {
-            Class shape = s.getClass();
-            Line linus = new Line();
-            if( s.getClass() == linus.getClass()){
-                continue;
-            }
+            if (s instanceof Line) continue;
             s.setTranslateX((c.getX() - position.getX()) + s.getTranslateX());
             s.setTranslateY((c.getY() - position.getY()) + s.getTranslateY());
         }
@@ -181,6 +209,8 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     @Override
     public void update(LocalTime l) {
         Platform.runLater(() -> {
+                setCurrentStreet();
+            //System.out.println(currentStreet);
                 distance += speed;
                 //System.out.println(String.format("distance: %f, vzdálenost: %f", path.getPathDistance(), distance));
                 Coordinate c;

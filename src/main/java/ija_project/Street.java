@@ -1,16 +1,10 @@
 package ija_project;
 
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -20,19 +14,11 @@ import com.fasterxml.jackson.databind.util.StdConverter;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.beans.property.DoubleProperty;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.awt.geom.Point2D;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import static java.lang.Math.*;
@@ -92,7 +78,6 @@ public class Street implements Drawable{
         line2.setStrokeLineCap(StrokeLineCap.ROUND);
 
         double distance = pow(pow(end.getX()-start.getX(),2)+pow(end.getY()-start.getY(),2),0.5);
-        System.out.println(String.format("distance: %f",  distance));
         int dcase = 0;
         if(distance<300){dcase = 1;}
         if(distance>300){dcase = 2;}

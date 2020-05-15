@@ -24,6 +24,15 @@ public class Path {
         setStopList();
     }
 
+    public List<Stop> getStopList() {
+        return stopList;
+    }
+
+    public void setStopList(List<Stop> stopList) {
+        this.stopList = stopList;
+    }
+
+
     @JsonIgnore
     public double getPathDistance() {
         double finalDistance = 0;
@@ -34,7 +43,7 @@ public class Path {
     }
 
     @JsonIgnore
-    private double getDistance(Coordinate a, Coordinate b) {
+    public double getDistance(Coordinate a, Coordinate b) {
         return Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY(), 2));
     }
 
@@ -47,7 +56,6 @@ public class Path {
         Coordinate x = null;
         Coordinate y = null;
 
-        //checkDistance(distance, distance - v.getSpeed());
 
         for (int i = 0; i < path.size() - 1; i++) {
             x = path.get(i);

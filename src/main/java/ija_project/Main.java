@@ -6,14 +6,12 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Main extends Application {
@@ -29,21 +27,6 @@ public class Main extends Application {
 
         // get the controller to use timer and import data
         Controller controller = loader.getController();
-//
-//        // sample data
-//        List<Coordinate> coordinates = new ArrayList<>();
-//        List<Path> paths = new ArrayList<>();
-//      List<Vehicle> vehicles = new ArrayList<>();
-//        coordinates.add(new Coordinate(100, 100));
-////
-//       paths.add(new Path(Arrays.asList(coordinates.get(0), new Coordinate(500, 500), coordinates.get(0)), "25"));
-////        elements.add(vehicles.get(0));
-//        vehicles.add(new Vehicle(new Coordinate(50, 320), 10, new Path(Arrays.asList(
-//                new Coordinate(100, 300),
-//                new Coordinate(500, 50)
-//        ), "55"),new ArrayList<Integer>(Arrays.asList(20,20,20)),2, 1));
-
-        //Data data = new Data(coordinates, vehicles, null, null, paths);
 
         YAMLFactory factory = new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER);
         ObjectMapper mapper = new ObjectMapper(factory);
@@ -53,10 +36,10 @@ public class Main extends Application {
 
         // deserialization
         Data data1 = mapper.readValue(new File("data.yml"), Data.class);
-        System.out.println(data1.getCoordinates());
-        System.out.println(data1.getStops());
-        System.out.println(data1.getStreets());
-        System.out.println(data1.getVehicles());
+//        System.out.println(data1.getCoordinates());
+//        System.out.println(data1.getStops());
+//        System.out.println(data1.getStreets());
+//        System.out.println(data1.getVehicles());
 
         // import elements to gui
         List<Drawable> elements = new ArrayList<>(data1.getStreets());

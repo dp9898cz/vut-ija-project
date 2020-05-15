@@ -24,3 +24,4 @@ hs_err_pid*
 .gradle
 .idea
 gradle
+build/resources/main/layout2.fxml
