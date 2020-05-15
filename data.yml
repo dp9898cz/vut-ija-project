@@ -86,33 +86,61 @@ coordinates:
   y: 125.0
 stops:
   - &200 coordinates: *1
+    name: Depo U Obchvatu
   - &201 coordinates: *3
+    name: U Pole
   - &202 coordinates: *4
+    name: Nad Pramenem
   - &204 coordinates: *7
+    name: Prodejna nábytku
   - &205 coordinates: *8
+    name: V Kopci
   - &206 coordinates: *9
+    name: Novostavby
   - &207 coordinates: *12
+    name: U Sovy
   - &208 coordinates: *14
+    name: Hřbitov
   - &209 coordinates: *17
+    name: Mlýnský náhon
   - &210 coordinates: *18
+    name: Pošta
   - &211 coordinates: *19
+    name: Obecní úřad
   - &212 coordinates: *22
+    name: Stará studna
   - &213 coordinates: *23
+    name: Bytovky
   - &214 coordinates: *26
+    name: U Ranče
   - &215 coordinates: *29
+    name: Stoletý dub
   - &216 coordinates: *30
+    name: Škola
   - &217 coordinates: *31
+    name: Pivnice
   - &218 coordinates: *34
+    name: Potraviny
   - &219 coordinates: *35
+    name: Kaplička
   - &220 coordinates: *36
+    name: Stadion
   - &221 coordinates: *39
+    name: U Shreka
   - &222 coordinates: *40
+    name: Dětský lékař
   - &223 coordinates: *41
+    name: U Kočky
   - &224 coordinates: *42
+    name: Zahrady
   - &225 coordinates: *37
+    name: Depo U Potoka
   - &226 coordinates: *38
+    name: Depo U Obchvatu
   - &227 coordinates: *25
+    name: Depo Na Kopci
   - &228 coordinates: *24
+    name: Depo Středisko
 
 
 paths:

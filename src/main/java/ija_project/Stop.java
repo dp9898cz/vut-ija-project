@@ -21,10 +21,12 @@ import java.util.List;
 
 @JsonDeserialize(converter = Stop.StopConstruct.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-public class Stop implements Drawable{
+public class Stop implements Drawable {
+    private Coordinate coordinates;
+    private String name;
+
     @JsonIgnore
     private static final String SQUARE_BUBBLE = "M24 1h-24v16.981h4v5.019l7-5.019h13z";
-    private Coordinate coordinates;
     @JsonIgnore
     private Street street;
     @JsonIgnore
@@ -77,7 +79,7 @@ public class Stop implements Drawable{
             @Override
             public void handle(MouseEvent t) {
                 double x= coordinates.getX();
-                String x1 =String.valueOf(x);
+                String x1 = name;
                 Tooltip zastavka = new Tooltip(x1);
                 Tooltip.install(circle, hackTooltipStartTiming(zastavka));
                 circle.setStroke(Color.WHITE);
@@ -103,6 +105,10 @@ public class Stop implements Drawable{
 
     public void setStreet(Street street) {
         this.street = street;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

@@ -68,27 +68,26 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     @JsonIgnore
     public String getLineInfo() {
         String completed = "";
-        completed += "Linka cislo " + number + "\n";
+        completed += "Linka cislo " + number + "\n\n";
         // now I have all stops in variable path.stopList
-        for (int i = 1; i < this.getPath().getStopList().size(); i++) {
+        for (int i = 0; i < this.getPath().getStopList().size(); i++) {
             String line = "";
             if (stopsPassed == i) {
                 line += "Aktualni poloha\n";
             }
-            line += Integer.toString(i);
-            line += ".\t";
             LocalTime time = this.getStartTime();
             time = time.truncatedTo(ChronoUnit.SECONDS);
             for (int j = 0; j < i; j++) {
                 time = time.plusSeconds(this.getStopsTimes().get(j));
             }
-            line += time.toString(); //get scheduled time
+            line += "\t" + time.toString(); //get scheduled time
+            if (i == 0) line += ":00";
             line += "\t";
-            line += "Nejake jmeno zastavky";
+            line += this.getPath().getStopList().get(i).getName();
             line += "\n";
             completed = completed.concat(line);
         }
-        completed += "Zpozdeni: ";
+        completed += "\nZpozdeni: ";
         completed += Integer.toString(currentDelay);
         completed += " s";
         return completed;
@@ -148,21 +147,21 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         Iterator<Coordinate> iterator = list.iterator();
         Coordinate first_coordinate = list.get(0);
         ArrayList <Line> lines = new ArrayList<>();
-        Line start = new Line(first_coordinate.getX(),first_coordinate.getY(),first_coordinate.getX(),first_coordinate.getY());
+        Line start = new Line(first_coordinate.getX() +9,first_coordinate.getY()-9,first_coordinate.getX()+9,first_coordinate.getY()-9);
         start.setStroke(rgb(0,0,0,0));
         start.setAccessibleRole(AccessibleRole.RADIO_MENU_ITEM);
         start.setStrokeWidth(12);
         lines.add(start);
         while(iterator.hasNext()) {
             Coordinate coordinate_end = iterator.next();
-            Line line = new Line(first_coordinate.getX(), first_coordinate.getY(), coordinate_end.getX(), coordinate_end.getY());
+            Line line = new Line(first_coordinate.getX() + 10, first_coordinate.getY() - 10, coordinate_end.getX() + 10, coordinate_end.getY() - 10);
             line.setStrokeWidth(5);
             line.setAccessibleRole(AccessibleRole.RADIO_MENU_ITEM);
             line.setStroke(rgb(0,0,0,0));
             first_coordinate = coordinate_end;
             lines.add(line);
         }
-        Line end = new Line(first_coordinate.getX(),first_coordinate.getY(),first_coordinate.getX(),first_coordinate.getY());
+        Line end = new Line(first_coordinate.getX() +10,first_coordinate.getY()+10,first_coordinate.getX()+10,first_coordinate.getY()+10);
         end.setStroke(rgb(0,0,0,0));
         end.setAccessibleRole(AccessibleRole.RADIO_MENU_ITEM);
         end.setStrokeWidth(12);
