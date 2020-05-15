@@ -222,6 +222,7 @@ public class Controller {
                     deleteVisibleLines();
                     for (Shape ss: v.getGui() ) {
                         if (ss instanceof Line) ss.setStroke(rgb(220,0,0,1));
+
                     }
                 });
             }
