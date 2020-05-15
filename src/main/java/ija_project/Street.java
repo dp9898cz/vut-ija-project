@@ -166,7 +166,7 @@ public class Street implements Drawable{
                 button1.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler<MouseEvent>() {
                             @Override public void handle(MouseEvent e) {
-                                urovenzatizeni=1.2;
+                                urovenzatizeni=1.3;
                                 line2.setStroke(Color.YELLOW);
                                 popupwindow.close();
                             }
@@ -174,7 +174,7 @@ public class Street implements Drawable{
                 button2.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler<MouseEvent>() {
                             @Override public void handle(MouseEvent e) {
-                                urovenzatizeni=1.4;
+                                urovenzatizeni=1.6;
                                 line2.setStroke(Color.ORANGE);
                                 popupwindow.close();
                             }
@@ -182,7 +182,7 @@ public class Street implements Drawable{
                 button3.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler<MouseEvent>() {
                             @Override public void handle(MouseEvent e) {
-                                urovenzatizeni= 1.6;
+                                urovenzatizeni= 2;
                                 line2.setStroke(Color.RED);
                                 popupwindow.close();
                             }

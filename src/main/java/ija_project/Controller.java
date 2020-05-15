@@ -39,12 +39,18 @@ public class Controller {
     public Button searchbutton;
     @FXML
     public TextArea textArea;
+    @FXML
+    public TextField Hours;
+    @FXML
+    public TextField Minutes;
+    @FXML
+    public TextField Seconds;
 
     @FXML
     private Timer timer;
 
     private LocalTime time = LocalTime.now();
-    private final LocalTime timeTemp = LocalTime.now();
+    private LocalTime timeTemp = LocalTime.now();
 
     private final List<TimerMapUpdate> elementsUpdate = new ArrayList<>();
 
@@ -158,6 +164,44 @@ public class Controller {
             showNumberAlert();
         }
     }
+
+    @FXML
+    private void onTimeChange() {
+        try {
+            int hours = Integer.parseInt(Hours.getText());
+            int minutes = Integer.parseInt(Minutes.getText());
+            int seconds = Integer.parseInt(Seconds.getText());
+            if (hours < 0 || hours > 23 || minutes < 0 || minutes > 60 || seconds < 0 || seconds > 60) {
+                showNumberAlert();
+                return;
+            }
+            // get time
+            LocalTime time = LocalTime.of(hours, minutes, seconds);
+            System.out.println(time);
+            timer.cancel();
+
+            // remove current elements
+            for (TimerMapUpdate s : elementsUpdate) {
+                Vehicle veh = (Vehicle) s;
+                for (Shape h : veh.getGui()) {
+                    mapContent.getChildren().remove(h);
+                }
+            }
+
+            this.time = time;
+            this.timeTemp = time;
+
+            // generate new vehicles
+            generateVehiclesOnTheRoad();
+
+            timer(1);
+
+        }
+        catch (NumberFormatException e) {
+            showNumberAlert();
+        }
+    }
+
 
     public void showNumberAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR, "Špatně zadané číslo. Možnosti jsou od 1 do 10.");
@@ -338,7 +382,10 @@ public class Controller {
 
 
                         for (int i = 0; i < v.getStopsPassed() - 1; i++) {
-                            scheduledTime += v.getStopsTimes().get(i);
+                            try {
+                                scheduledTime += v.getStopsTimes().get(i);
+                            }
+                            catch (IndexOutOfBoundsException ignored) {}
 
                         }
 

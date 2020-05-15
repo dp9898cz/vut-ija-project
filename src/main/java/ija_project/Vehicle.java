@@ -228,7 +228,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
                 break;
             }
         }
-        this.currentDelay = (int) (realTimeOnRoad - scheduledTime);
+        this.currentDelay = Math.abs((int) (realTimeOnRoad - scheduledTime));
 
     }
 
