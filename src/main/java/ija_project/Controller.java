@@ -9,6 +9,7 @@ import javafx.scene.AccessibleRole;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
@@ -39,6 +40,7 @@ public class Controller {
     public Button searchbutton;
     @FXML
     public TextArea textArea;
+    public MenuBar Menubarrr;
     @FXML
     public TextField Hours;
     @FXML
@@ -64,6 +66,8 @@ public class Controller {
     private static final double MAX_SCALE = 10;
     private static final double MIN_SCALE = -6;
     public  double zoomhandler = 0;
+
+
 
     //TODO
 
@@ -140,14 +144,7 @@ public class Controller {
         mapContent.setScaleY(zoom * mapContent.getScaleY());
         mapContent.layout();
     }
-    @FXML
-    private void onTimeStart(){
-            timer(1);
-    }
-    @FXML
-    private void onTimeStop(){
-        timer.cancel();
-    }
+
     @FXML
     private void OnTimeReset(){
 
@@ -443,14 +440,56 @@ public class Controller {
 
 
     @FXML
-    public void clickHelp() {
+    public void onHelp() {
         Alert alert=new Alert(Alert.AlertType.INFORMATION,"Tohle je help");
         alert.showAndWait();
     }
     @FXML
-    public void onCloseapp() {
+    public void onCloseApp() {
         Platform.exit();
         System.exit(0);
     }
+    @FXML
+    private void OnStart(){
+        timer(1);
+    }
+    @FXML
+    private void OnPause(){
+        timer.cancel();
+    }
+    private Stage primaryStage;
+    public void setStage(Stage stage) {
+        primaryStage = stage;
+    }
+    private boolean maximized = false;
+    public void onMinimaze(ActionEvent actionEvent) {
+        if(maximized == false) {
+            primaryStage.setMaximized(true);
+            maximized = true;
+        }else{
+            primaryStage.setMaximized(false);
+            maximized = false;
+        }
+
+    }
+
+//    private double xOffset = 800;
+//    private double yOffset = 600;
+//    private double changex ;
+//    private double changey ;
+//    public void onResizeDrag(MouseEvent event) {
+//        changex= event.getSceneX() -changex;
+//        changey= event.getSceneY() -changey;
+//        xOffset=xOffset+changex;
+//        yOffset=yOffset+changey;
+//        primaryStage.setWidth(xOffset);
+//        primaryStage.setHeight(yOffset);
+//
+//    }
+//    public void OnResizeClicked(MouseEvent event) {
+//        changex =  event.getSceneX();
+//        changey =  event.getSceneY();
+//    }
+
 
 }
