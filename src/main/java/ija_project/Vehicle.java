@@ -137,6 +137,11 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         Iterator<Coordinate> iterator = list.iterator();
         Coordinate first_coordinate = list.get(0);
         ArrayList <Line> lines = new ArrayList<>();
+        Line start = new Line(first_coordinate.getX(),first_coordinate.getY(),first_coordinate.getX(),first_coordinate.getY());
+        start.setStroke(rgb(0,0,0,0));
+        start.setAccessibleRole(AccessibleRole.RADIO_MENU_ITEM);
+        start.setStrokeWidth(12);
+        lines.add(start);
         while(iterator.hasNext()) {
             Coordinate coordinate_end = iterator.next();
             Line line = new Line(first_coordinate.getX(), first_coordinate.getY(), coordinate_end.getX(), coordinate_end.getY());
@@ -146,6 +151,11 @@ public class Vehicle implements Drawable, TimerMapUpdate {
             first_coordinate = coordinate_end;
             lines.add(line);
         }
+        Line end = new Line(first_coordinate.getX(),first_coordinate.getY(),first_coordinate.getX(),first_coordinate.getY());
+        end.setStroke(rgb(0,0,0,0));
+        end.setAccessibleRole(AccessibleRole.RADIO_MENU_ITEM);
+        end.setStrokeWidth(12);
+        lines.add(end);
 
         this.gui.addAll(lines);
 
