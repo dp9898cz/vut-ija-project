@@ -14,16 +14,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Arc?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ija_project.Controller">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="600.0" prefWidth="800.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ija_project.Controller">
    <center>
       <ScrollPane pannable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <content>
             <Group>
                <children>
-                  <Pane fx:id="mapContent" layoutX="-1.0" layoutY="6.0" onScroll="#onScroll" prefHeight="4000.0" prefWidth="4000.0" style="-fx-background-color: rgb(0,190,0);" />
+                  <Pane fx:id="mapContent" layoutX="-1.0" layoutY="6.0" onScroll="#onScroll" prefHeight="4000.0" prefWidth="4000.0" style="-fx-background-color: rgb(148, 147, 147);" />
                </children>
                <cursor>
                   <Cursor fx:constant="CROSSHAIR" />
@@ -33,47 +34,56 @@
       </ScrollPane>
    </center>
    <right>
-      <AnchorPane BorderPane.alignment="CENTER">
+      <AnchorPane layoutX="561.0" layoutY="50.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="196.0" layoutY="401.0" mnemonicParsing="false" onAction="#onScaleChange" text="Použít">
+            <Button layoutX="182.0" layoutY="391.0" mnemonicParsing="false" onAction="#onScaleChange" text="Použít">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Text layoutX="46.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Změnit rychlost animace (1-10):" />
-            <TextField fx:id="scaleTextField" alignment="BOTTOM_RIGHT" layoutX="6.0" layoutY="401.0" prefHeight="25.0" prefWidth="181.0" promptText="1" />
-            <TextField fx:id="Timer" alignment="CENTER_LEFT" layoutX="64.0" layoutY="474.0" prefHeight="25.0" prefWidth="182.0" />
-            <TextField fx:id="Timer_update" alignment="CENTER" layoutX="64.0" layoutY="503.0" prefHeight="25.0" prefWidth="182.0" />
-            <Text layoutX="24.0" layoutY="491.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Čas" />
-            <Text layoutX="18.0" layoutY="520.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer" />
-            <TextField fx:id="searchbox" alignment="BOTTOM_LEFT" layoutX="6.0" layoutY="14.0" prefHeight="25.0" prefWidth="175.0" />
-            <Button fx:id="searchbutton" layoutX="185.0" layoutY="14.0" mnemonicParsing="false" onAction="#searchAction" prefHeight="25.0" prefWidth="56.0" text="Search" />
-            <TextArea fx:id="textArea" editable="false" layoutX="6.0" layoutY="47.0" prefHeight="323.0" prefWidth="235.0" />
-            <Button layoutX="197.0" layoutY="464.0" mnemonicParsing="false" onAction="#onTimeChange" text="Apply">
+            <Text layoutX="15.0" layoutY="385.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Změnit rychlost animace (1-10):" />
+            <TextField fx:id="scaleTextField" alignment="BOTTOM_RIGHT" layoutX="15.0" layoutY="391.0" prefHeight="25.0" prefWidth="162.0" promptText="1" />
+            <TextArea fx:id="textArea" editable="false" layoutX="3.0" layoutY="43.0" prefHeight="323.0" prefWidth="235.0" promptText="Vítejte!" />
+            <Button layoutX="182.0" layoutY="449.0" mnemonicParsing="false" onAction="#onTimeChange" text="Použít">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <TextField fx:id="Minutes" alignment="CENTER_RIGHT" layoutX="72.0" layoutY="439.0" prefHeight="25.0" prefWidth="50.0" promptText="MM" />
-            <TextField fx:id="Seconds" alignment="CENTER_RIGHT" layoutX="137.0" layoutY="439.0" prefHeight="25.0" prefWidth="50.0" promptText="SS" />
-            <TextField fx:id="Hours" alignment="CENTER_RIGHT" layoutX="8.0" layoutY="439.0" prefHeight="25.0" prefWidth="50.0" promptText="HH" />
-            <Text layoutX="62.0" layoutY="457.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+            <TextField fx:id="Minutes" alignment="CENTER_RIGHT" layoutX="70.0" layoutY="450.0" prefHeight="25.0" prefWidth="50.0" promptText="MM" />
+            <TextField fx:id="Seconds" alignment="CENTER_RIGHT" layoutX="127.0" layoutY="450.0" prefHeight="25.0" prefWidth="50.0" promptText="SS" />
+            <TextField fx:id="Hours" alignment="CENTER_RIGHT" layoutX="15.0" layoutY="450.0" prefHeight="25.0" prefWidth="50.0" promptText="HH" />
+            <Text layoutX="66.0" layoutY="468.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="8.46875">
                <font>
                   <Font size="16.0" />
                </font>
             </Text>
-            <Text layoutX="127.0" layoutY="457.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+            <Text layoutX="122.0" layoutY="468.0" strokeType="OUTSIDE" strokeWidth="0.0" text=":">
                <font>
                   <Font size="16.0" />
                </font>
             </Text>
+            <TextField id="cas" fx:id="Timer" alignment="CENTER" layoutX="9.0" prefHeight="36.0" prefWidth="224.0">
+               <font>
+                  <Font name="Calibri" size="23.0" />
+               </font>
+            </TextField>
+            <Text layoutX="15.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Změnit čas animace :" />
+            <Text fill="#d7d7d7" layoutX="101.0" layoutY="524.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Authors : Daniel Pátek" />
+            <Text fill="#cdcdcd" layoutX="152.0" layoutY="542.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Daniel Čechák" />
+            <Arc fill="#ff281f" layoutX="20.0" layoutY="529.0" length="270.0" opacity="0.34" radiusX="15.0" radiusY="10.0" rotate="90.0" startAngle="45.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" />
+            <Text layoutX="29.0" layoutY="541.0" opacity="0.23" strokeType="OUTSIDE" strokeWidth="0.0" text="H" wrappingWidth="22.71875">
+               <font>
+                  <Font size="32.0" />
+               </font>
+            </Text>
+            <Arc fill="#f2bf1b" layoutX="56.0" layoutY="529.0" length="180.0" opacity="0.24" radiusX="20.0" radiusY="12.0" startAngle="270.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" />
          </children>
       </AnchorPane>
    </right>
    <top>
-      <HBox alignment="TOP_RIGHT" prefHeight="44.0" prefWidth="800.0" BorderPane.alignment="TOP_RIGHT">
+      <HBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="800.0" BorderPane.alignment="TOP_RIGHT">
          <children>
-            <GridPane alignment="TOP_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="44.0" prefWidth="1345.0" HBox.hgrow="ALWAYS">
+            <GridPane id="Gridstyle" alignment="TOP_RIGHT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="1345.0" HBox.hgrow="ALWAYS">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -82,30 +92,57 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
               </rowConstraints>
                <children>
-                  <Button id="XButton" fx:id="XButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onCloseApp" prefHeight="30.0" prefWidth="30.0" text="X" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+                  <Button id="XButton" fx:id="XButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onCloseApp" prefHeight="20.0" prefWidth="40.0" styleClass="XButton" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
                      <GridPane.margin>
-                        <Insets right="1.0" top="1.0" />
+                        <Insets top="1.0" />
                      </GridPane.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </Button>
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#onHelp" prefHeight="30.0" prefWidth="80.0" text="Help">
+                  <Button id="help" alignment="CENTER" mnemonicParsing="false" onAction="#onHelp" prefHeight="50.0" prefWidth="120.0" text="Nápověda">
                      <GridPane.margin>
-                        <Insets left="200.0" />
+                        <Insets bottom="1.0" left="240.0" />
                      </GridPane.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </Button>
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#OnPause" prefHeight="30.0" prefWidth="80.0" text="Pause">
+                  <Button id="pause" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#OnPause" prefHeight="50.0" prefWidth="120.0" text="Pauza">
                      <GridPane.margin>
-                        <Insets left="100.0" right="50.0" />
+                        <Insets bottom="1.0" left="120.0" right="50.0" />
                      </GridPane.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </Button>
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#OnStart" prefHeight="30.0" prefWidth="80.0" text="Start">
+                  <Button id="start" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#OnStart" prefHeight="50.0" prefWidth="120.0" text="Start">
                      <GridPane.margin>
-                        <Insets left="1.0" />
+                        <Insets bottom="1.0" />
                      </GridPane.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </Button>
-                  <Button fx:id="MaxButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onMinimaze" prefHeight="30.0" prefWidth="30.0" text="_" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+                  <Button id="MAXButton" fx:id="MaxButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onMinimaze" prefHeight="25.0" prefWidth="40.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
                      <GridPane.margin>
-                        <Insets right="32.0" top="1.0" />
+                        <Insets right="40.0" top="1.0" />
                      </GridPane.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <font>
+                        <Font name="Wingdings" size="12.0" />
+                     </font>
                   </Button>
                </children>
             </GridPane>
