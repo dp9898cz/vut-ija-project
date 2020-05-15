@@ -9,6 +9,7 @@ import javafx.scene.AccessibleRole;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
@@ -39,18 +40,13 @@ public class Controller {
     public Button searchbutton;
     @FXML
     public TextArea textArea;
-    @FXML
-    public TextField Hours;
-    @FXML
-    public TextField Minutes;
-    @FXML
-    public TextField Seconds;
+    public MenuBar Menubarrr;
 
     @FXML
     private Timer timer;
 
     private LocalTime time = LocalTime.now();
-    private LocalTime timeTemp = LocalTime.now();
+    private final LocalTime timeTemp = LocalTime.now();
 
     private final List<TimerMapUpdate> elementsUpdate = new ArrayList<>();
 
@@ -64,6 +60,8 @@ public class Controller {
     private static final double MAX_SCALE = 10;
     private static final double MIN_SCALE = -6;
     public  double zoomhandler = 0;
+
+
 
     //TODO
 
@@ -140,14 +138,7 @@ public class Controller {
         mapContent.setScaleY(zoom * mapContent.getScaleY());
         mapContent.layout();
     }
-    @FXML
-    private void onTimeStart(){
-            timer(1);
-    }
-    @FXML
-    private void onTimeStop(){
-        timer.cancel();
-    }
+
     @FXML
     private void OnTimeReset(){
 
@@ -164,44 +155,6 @@ public class Controller {
             showNumberAlert();
         }
     }
-
-    @FXML
-    private void onTimeChange() {
-        try {
-            int hours = Integer.parseInt(Hours.getText());
-            int minutes = Integer.parseInt(Minutes.getText());
-            int seconds = Integer.parseInt(Seconds.getText());
-            if (hours < 0 || hours > 23 || minutes < 0 || minutes > 60 || seconds < 0 || seconds > 60) {
-                showNumberAlert();
-                return;
-            }
-            // get time
-            LocalTime time = LocalTime.of(hours, minutes, seconds);
-            System.out.println(time);
-            timer.cancel();
-
-            // remove current elements
-            for (TimerMapUpdate s : elementsUpdate) {
-                Vehicle veh = (Vehicle) s;
-                for (Shape h : veh.getGui()) {
-                    mapContent.getChildren().remove(h);
-                }
-            }
-
-            this.time = time;
-            this.timeTemp = time;
-
-            // generate new vehicles
-            generateVehiclesOnTheRoad();
-
-            timer(1);
-
-        }
-        catch (NumberFormatException e) {
-            showNumberAlert();
-        }
-    }
-
 
     public void showNumberAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR, "Špatně zadané číslo. Možnosti jsou od 1 do 10.");
@@ -317,26 +270,13 @@ public class Controller {
         }
 
         // add stops to the all vehicles paths
-        for (Vehicle v: vehicles) {
-            List<Coordinate> allPointsVehicle = v.getPath().getPath();
-            for (Coordinate c : allPointsVehicle) {
-                //allPoints.add(p.getCoordinates());
-                for (Stop p : allStops) {
-                    if (p.getCoordinates().equals(c)) {
-                        v.getPath().getStopList().add(p);
-                    }
+        for (Stop s : allStops) {
+            for (Vehicle v : vehicles) {
+                if (v.getPath().getPath().contains(s.getCoordinates())) {
+                    v.getPath().getStopList().add(s);
                 }
             }
-
         }
-
-//        for (Stop s : allStops) {
-//            for (Vehicle v : vehicles) {
-//                if (v.getPath().getPath().contains(s.getCoordinates())) {
-//                    v.getPath().getStopList().add(s);
-//                }
-//            }
-//        }
 
         // there generate vehicles on the road
         generateVehiclesOnTheRoad();
@@ -382,11 +322,7 @@ public class Controller {
 
 
                         for (int i = 0; i < v.getStopsPassed() - 1; i++) {
-                            try {
-                                scheduledTime += v.getStopsTimes().get(i);
-                            }
-                            catch (IndexOutOfBoundsException ignored) {}
-
+                            scheduledTime += v.getStopsTimes().get(i);
                         }
 
                         // set start time on every vehicle
@@ -398,6 +334,9 @@ public class Controller {
 
                         // set the time passed variable
                         if (timeStart != null) {
+                            if (timeStart.isBefore(timeTemp)) {
+                                    scheduledTime += v.getStopsTimes().get(0);
+                            }
                             timePassedSinceStart = Math.abs(Duration.between(timeStart, time).toMillis()) / 1000;
                         }
 
@@ -443,14 +382,56 @@ public class Controller {
 
 
     @FXML
-    public void clickHelp() {
+    public void onHelp() {
         Alert alert=new Alert(Alert.AlertType.INFORMATION,"Tohle je help");
         alert.showAndWait();
     }
     @FXML
-    public void onCloseapp() {
+    public void onCloseApp() {
         Platform.exit();
         System.exit(0);
     }
+    @FXML
+    private void OnStart(){
+        timer(1);
+    }
+    @FXML
+    private void OnPause(){
+        timer.cancel();
+    }
+    private Stage primaryStage;
+    public void setStage(Stage stage) {
+        primaryStage = stage;
+    }
+    private boolean maximized = false;
+    public void onMinimaze(ActionEvent actionEvent) {
+        if(maximized == false) {
+            primaryStage.setMaximized(true);
+            maximized = true;
+        }else{
+            primaryStage.setMaximized(false);
+            maximized = false;
+        }
+
+    }
+
+//    private double xOffset = 800;
+//    private double yOffset = 600;
+//    private double changex ;
+//    private double changey ;
+//    public void onResizeDrag(MouseEvent event) {
+//        changex= event.getSceneX() -changex;
+//        changey= event.getSceneY() -changey;
+//        xOffset=xOffset+changex;
+//        yOffset=yOffset+changey;
+//        primaryStage.setWidth(xOffset);
+//        primaryStage.setHeight(yOffset);
+//
+//    }
+//    public void OnResizeClicked(MouseEvent event) {
+//        changex =  event.getSceneX();
+//        changey =  event.getSceneY();
+//    }
+
 
 }

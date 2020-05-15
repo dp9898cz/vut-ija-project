@@ -12,7 +12,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
-import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -43,8 +42,6 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     private String number = "";
     @JsonIgnore
     private Street currentStreet;
-    @JsonIgnore
-    private int currentDelay = 0;
 
     // Default constructor for Jackson
     private Vehicle(){}
@@ -68,28 +65,21 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     @JsonIgnore
     public String getLineInfo() {
         String completed = "";
-        completed += "Linka cislo " + number + "\n\n";
         // now I have all stops in variable path.stopList
-        for (int i = 0; i < this.getPath().getStopList().size(); i++) {
-            String line = "";
-            if (stopsPassed == i) {
-                line += "Aktualni poloha\n";
-            }
+        for (int i = 1; i < this.getPath().getStopList().size(); i++) {
+            String line = Integer.toString(i);
+            line += ".\t";
             LocalTime time = this.getStartTime();
             time = time.truncatedTo(ChronoUnit.SECONDS);
             for (int j = 0; j < i; j++) {
                 time = time.plusSeconds(this.getStopsTimes().get(j));
             }
-            line += "\t" + time.toString(); //get scheduled time
-            if (i == 0) line += ":00";
+            line += time.toString(); //get scheduled time
             line += "\t";
-            line += this.getPath().getStopList().get(i).getName();
+            line += "Nejake jmeno zastavky";
             line += "\n";
             completed = completed.concat(line);
         }
-        completed += "\nZpozdeni: ";
-        completed += Integer.toString(currentDelay);
-        completed += " s";
         return completed;
     }
 
@@ -104,18 +94,18 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     @JsonIgnore
     public Integer findOutHowManyStopsPassedAlready(Integer currentTimePassed) {
-        int handle = 0;
-        int counter = 0;
+        Integer handle = 0;
+        Integer counter = 0;
         for (Integer i : stopsTimes) {
             handle += i;
-            if (handle < currentTimePassed) {
+            if (handle <= currentTimePassed) {
                 counter++;
             }
             else {
                 break;
             }
         }
-        return counter + 1; // plus start point
+        return counter;
     }
 
     @JsonIgnore
@@ -147,21 +137,21 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         Iterator<Coordinate> iterator = list.iterator();
         Coordinate first_coordinate = list.get(0);
         ArrayList <Line> lines = new ArrayList<>();
-        Line start = new Line(first_coordinate.getX() +9,first_coordinate.getY()-9,first_coordinate.getX()+9,first_coordinate.getY()-9);
+        Line start = new Line(first_coordinate.getX(),first_coordinate.getY(),first_coordinate.getX(),first_coordinate.getY());
         start.setStroke(rgb(0,0,0,0));
         start.setAccessibleRole(AccessibleRole.RADIO_MENU_ITEM);
         start.setStrokeWidth(12);
         lines.add(start);
         while(iterator.hasNext()) {
             Coordinate coordinate_end = iterator.next();
-            Line line = new Line(first_coordinate.getX() + 10, first_coordinate.getY() - 10, coordinate_end.getX() + 10, coordinate_end.getY() - 10);
+            Line line = new Line(first_coordinate.getX(), first_coordinate.getY(), coordinate_end.getX(), coordinate_end.getY());
             line.setStrokeWidth(5);
             line.setAccessibleRole(AccessibleRole.RADIO_MENU_ITEM);
             line.setStroke(rgb(0,0,0,0));
             first_coordinate = coordinate_end;
             lines.add(line);
         }
-        Line end = new Line(first_coordinate.getX() +10,first_coordinate.getY()+10,first_coordinate.getX()+10,first_coordinate.getY()+10);
+        Line end = new Line(first_coordinate.getX(),first_coordinate.getY(),first_coordinate.getX(),first_coordinate.getY());
         end.setStroke(rgb(0,0,0,0));
         end.setAccessibleRole(AccessibleRole.RADIO_MENU_ITEM);
         end.setStrokeWidth(12);
@@ -212,23 +202,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
         }
         else {
             this.currentStreet = nextStreet;
-
         }
-    }
-
-    private void updateDelay(LocalTime currentTime) {
-        long realTimeOnRoad = (Math.abs(Duration.between(currentTime, startTime).toMillis()) / 1000) - 1;
-        long scheduledTime = 0;
-        for (int i = 0; i < stopsPassed - 1; i++) {
-            try {
-                scheduledTime += this.getStopsTimes().get(i);
-            }
-            catch (IndexOutOfBoundsException e) {
-                break;
-            }
-        }
-        this.currentDelay = Math.abs((int) (realTimeOnRoad - scheduledTime));
-
     }
 
 
@@ -245,31 +219,20 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     @Override
     public void update(LocalTime l) {
         Platform.runLater(() -> {
-            setCurrentStreet();
-            double streetTraffic = 1.0;
-            if (currentStreet != null)
-                streetTraffic = currentStreet.getUrovenzatizeni();
-
-            List<Coordinate> stops = new ArrayList<>();
-            for (Stop s : path.getStopList()) {
-                stops.add(s.getCoordinates());
-            }
-            if (stops.contains(position)) {
-                updateDelay(l);
-            }
-
-            distance += ((int) (speed / streetTraffic));
-            //System.out.println(String.format("distance: %f, vzdálenost: %f", path.getPathDistance(), distance));
-            Coordinate c;
-            if (distance >= path.getPathDistance()) {
-                // set the last coordinates
-                c = path.getPath().get(path.getPath().size() - 1);
-            }
-            else {
-                c = path.getDistanceCoordinate(distance, this);
-            }
-            move(c);
-            position = c;
+                setCurrentStreet();
+            //System.out.println(currentStreet);
+                distance += speed;
+                //System.out.println(String.format("distance: %f, vzdálenost: %f", path.getPathDistance(), distance));
+                Coordinate c;
+                if (distance >= path.getPathDistance()) {
+                    // set the last coordinates
+                    c = path.getPath().get(path.getPath().size() - 1);
+                }
+                else {
+                    c = path.getDistanceCoordinate(distance, this);
+                }
+                move(c);
+                position = c;
             }
         );
     }
