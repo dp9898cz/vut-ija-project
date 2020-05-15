@@ -273,13 +273,26 @@ public class Controller {
         }
 
         // add stops to the all vehicles paths
-        for (Stop s : allStops) {
-            for (Vehicle v : vehicles) {
-                if (v.getPath().getPath().contains(s.getCoordinates())) {
-                    v.getPath().getStopList().add(s);
+        for (Vehicle v: vehicles) {
+            List<Coordinate> allPointsVehicle = v.getPath().getPath();
+            for (Coordinate c : allPointsVehicle) {
+                //allPoints.add(p.getCoordinates());
+                for (Stop p : allStops) {
+                    if (p.getCoordinates().equals(c)) {
+                        v.getPath().getStopList().add(p);
+                    }
                 }
             }
+
         }
+
+//        for (Stop s : allStops) {
+//            for (Vehicle v : vehicles) {
+//                if (v.getPath().getPath().contains(s.getCoordinates())) {
+//                    v.getPath().getStopList().add(s);
+//                }
+//            }
+//        }
 
         // there generate vehicles on the road
         generateVehiclesOnTheRoad();
@@ -326,6 +339,7 @@ public class Controller {
 
                         for (int i = 0; i < v.getStopsPassed() - 1; i++) {
                             scheduledTime += v.getStopsTimes().get(i);
+
                         }
 
                         // set start time on every vehicle
@@ -337,9 +351,6 @@ public class Controller {
 
                         // set the time passed variable
                         if (timeStart != null) {
-                            if (timeStart.isBefore(timeTemp)) {
-                                    scheduledTime += v.getStopsTimes().get(0);
-                            }
                             timePassedSinceStart = Math.abs(Duration.between(timeStart, time).toMillis()) / 1000;
                         }
 

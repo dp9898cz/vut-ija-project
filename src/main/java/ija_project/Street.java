@@ -27,7 +27,9 @@ import static javafx.scene.paint.Color.rgb;
 
 @JsonDeserialize(converter = Street.StreetConstruct.class)
 public class Street implements Drawable{
-    public static double urovenzatizeni;
+    @JsonIgnore
+    public double urovenzatizeni = 1.0;
+
     private Coordinate start;
     private Coordinate end;
     private String name;
@@ -156,7 +158,7 @@ public class Street implements Drawable{
                 button.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler<MouseEvent>() {
                             @Override public void handle(MouseEvent e) {
-                                urovenzatizeni=0.0;
+                                urovenzatizeni=1.0;
                                 line2.setStroke(rgb(75,75,75));
                                 popupwindow.close();
                             }
@@ -164,7 +166,7 @@ public class Street implements Drawable{
                 button1.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler<MouseEvent>() {
                             @Override public void handle(MouseEvent e) {
-                                urovenzatizeni=1.0;
+                                urovenzatizeni=1.2;
                                 line2.setStroke(Color.YELLOW);
                                 popupwindow.close();
                             }
@@ -172,7 +174,7 @@ public class Street implements Drawable{
                 button2.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler<MouseEvent>() {
                             @Override public void handle(MouseEvent e) {
-                                urovenzatizeni=2.0;
+                                urovenzatizeni=1.4;
                                 line2.setStroke(Color.ORANGE);
                                 popupwindow.close();
                             }
@@ -180,7 +182,7 @@ public class Street implements Drawable{
                 button3.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler<MouseEvent>() {
                             @Override public void handle(MouseEvent e) {
-                                urovenzatizeni= 3.0;
+                                urovenzatizeni= 1.6;
                                 line2.setStroke(Color.RED);
                                 popupwindow.close();
                             }
@@ -276,6 +278,10 @@ public class Street implements Drawable{
         }
         return Arrays.asList(line2,line,text);
 
+    }
+
+    public double getUrovenzatizeni() {
+        return urovenzatizeni;
     }
 
     @Override
