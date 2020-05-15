@@ -430,7 +430,7 @@ public class Controller {
 
                     Timer.setText(time.truncatedTo(ChronoUnit.SECONDS).toString());
                     int s = Math.toIntExact(Math.abs(Duration.between(timeTemp, time).toMillis()) / 1000);
-                    Timer_update.setText(Integer.toString(s));
+                    
                 }
                 );
             }

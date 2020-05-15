@@ -37,30 +37,83 @@
 
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
-    -fx-background-color :derive(rgb(255, 255, 255),90.0%);
+    -fx-background-color :derive(rgb(224, 224, 224),90.0%);
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }
 
 .scroll-bar:horizontal .thumb:hover,
 .scroll-bar:vertical .thumb:hover {
-    -fx-background-color :derive(rgb(120, 190, 223),10.0%);
+    -fx-background-color :derive(rgb(31, 31, 31),10.0%);
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }
 #XButton{
-    -fx-background: rgb(255, 255, 255);
-    -fx-background-image: url("https://upload.wikimedia.org/wikipedia/commons/c/ca/Transparent_X.png");
+    -fx-background-color: rgb(37, 37, 37);
+    -fx-background-radius:0em;
+    -fx-background-image: url('cancel.png');
+    -fx-background-size: 14px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 50%;
+}
+#XButton:hover{
+    -fx-background-color: rgb(87, 84, 84);
+    
+}
+
+#MAXButton{
+    -fx-background-color: rgb(37, 37, 37);
+    -fx-background-radius:0em;
+    -fx-background-image: url('maximize.png');
+    -fx-background-size: 20px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 50%;
+}
+#MAXButton:hover{
+    -fx-background-color: rgb(87, 84, 84);
+
+}
+#start{
+    -fx-background-color: rgb(37, 37, 37);
+    -fx-background-radius:0em;
+    
+}
+#start:hover{
+    -fx-background-color: rgb(87, 84, 84);
+
+}
+#pause{
+    -fx-background-color: rgb(37, 37, 37);
+    -fx-background-radius:0em;
+    
+}
+#pause:hover{
+    -fx-background-color: rgb(87, 84, 84);
+
+}
+#help{
+    -fx-background-color: rgb(37, 37, 37);
+    -fx-background-radius:0em;
+    
+}
+#help:hover{
+    -fx-background-color: rgb(87, 84, 84);
+
+}
+#cas{
+    -fx-background-color: rgb(116, 116, 116);
 }
 .button{
     -fx-background-color: #333333;
     -fx-text-fill: white;
     -fx-alignment: CENTER;  
 }
-
+#Gridstyle{
+    -fx-background-color: #000000;
+}
 .root{
-    -fx-base: rgb(122, 151, 168);
-    -fx-background: rgb(126, 192, 223);
+    -fx-base: rgb(148, 147, 147);
+    -fx-background: rgb(116, 116, 116);
 }
 .text-area{
     -fx-text-fill: black;
