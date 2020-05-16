@@ -24,7 +24,8 @@ import static javafx.scene.paint.Color.rgb;
 /**
  * Vehicle class represent vehicle
  * @author Daniel Pátek (xpatek08)
- * @version %I%, %G%
+ * @author Daniel Čechák (xcecha06)
+ * @version 1.0
  */
 @JsonDeserialize(converter = Vehicle.VehicleConstruct.class)
 public class Vehicle implements Drawable, TimerMapUpdate {
@@ -216,6 +217,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
     /**
      * Get elements of GUI
      * @return GUI elements
+     * {@link Vehicle#gui}
      */
     @Override
     public List<Shape> getGui() {
@@ -224,6 +226,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * Set up GUI elements
+     * {@link Vehicle#gui}
      */
     private void setGui() {
         this.gui = new ArrayList<>();
@@ -376,6 +379,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#position}
+     * @return Current position
      */
     public Coordinate getPosition() {
         return position;
@@ -383,6 +387,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#speed}
+     * @return Speed
      */
     public double getSpeed() {
         return speed;
@@ -390,6 +395,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#path}
+     * @return Path
      */
     public Path getPath() {
         return path;
@@ -397,6 +403,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#stopsTimes}
+     * @return Stops times
      */
     public List<Integer> getStopsTimes() {
         return stopsTimes;
@@ -404,6 +411,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#goEveryXMinute}
+     * @return Every X minute, how ofter vehicle goes
      */
     public int getGoEveryXMinute() {
         return goEveryXMinute;
@@ -411,6 +419,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#startMinute}
+     * @return Start Minute
      */
     public int getStartMinute() {
         return startMinute;
@@ -418,6 +427,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#stopsPassed}
+     * @return Number of stops passed
      */
     public int getStopsPassed() {
         return stopsPassed;
@@ -425,6 +435,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#stopsPassed}
+     * @param stopsPassed Number of stops passed
      */
     public void setStopsPassed(int stopsPassed) {
         this.stopsPassed = stopsPassed;
@@ -432,6 +443,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#startTime}
+     * @return Start time
      */
     public LocalTime getStartTime() {
         return startTime;
@@ -439,6 +451,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#startTime}
+     * @param startTime Start time
      */
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
@@ -446,6 +459,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#lastStop}
+     * @return Current position
      */
     public Coordinate getLastStop() {
         return lastStop;
@@ -453,6 +467,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#lastStop}
+     * @param lastStop Last stop
      */
     public void setLastStop(Coordinate lastStop) {
         this.lastStop = lastStop;
@@ -460,6 +475,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#number}
+     * @return Vehicle number
      */
     public String getNumber() {
         return number;
@@ -474,6 +490,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#distance}
+     * @return Distance passed
      */
     public double getDistance() {
         return distance;
@@ -481,6 +498,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
     /**
      * {@link Vehicle#distance}
+     * @param distance Vehicle distance passed
      */
     public void setDistance(double distance) {
         this.distance = distance;
@@ -495,12 +513,12 @@ public class Vehicle implements Drawable, TimerMapUpdate {
                 '}';
     }
 
-
     /**
      * Static class for Jackson
      * Used for initialisation of number and gui elements
      * @author Daniel Pátek (xpatek08)
-     * @version %I%, %G%
+     * @author Daniel Čechák (xcecha06)
+     * @version 1.0
      */
     static class VehicleConstruct extends StdConverter<Vehicle,Vehicle> {
 

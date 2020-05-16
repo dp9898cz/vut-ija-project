@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="vut.project" default="all">
+  
+  <!-- Compiler options -->
+  <property name="compiler.debug" value="off"/>
+  <property name="compiler-warn" value="off"/>
+
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+
+
+  <!-- Project Libraries -->
+  <path id="jackson-annotations">
+    <pathelement location="${basedir}/lib/jackson-annotations-2.11.0.jar"/>
+  </path>
+  <path id="jackson-core">
+    <pathelement location="${basedir}/lib/jackson-core-2.11.0.jar"/>
+  </path>
+  <path id="databind">
+    <pathelement location="${basedir}/lib/jackson-databind-2.11.0.jar"/>
+  </path>
+  <path id="dataformat-yaml">
+    <pathelement location="${basedir}/lib/jackson-dataformat-yaml-2.11.0.jar"/>
+  </path>
+  <path id="snake-yaml">
+    <pathelement location="${basedir}/lib/snakeyaml-1.26.jar"/>
+  </path>
+
+  
+  <dirname property="module.vut.project.basedir" file="${ant.file}"/>
+  <property name="compiler.args.vut.project" value="-encoding UTF-8 -source 8 -target 1.8"/>
+  
+  <!-- Module vut.project.main -->
+  <dirname property="basedir" file="${ant.file}"/>
+  <property name="compiler-args" value="-encoding UTF-8 -source 8 -target 1.8"/>
+  <property name="output-dir" value="${basedir}/build/classes/java/main"/>
+
+
+  <path id="class-path">
+    <path refid="dataformat-yaml"/>
+    <path refid="databind"/>
+    <path refid="jackson-core"/>
+    <path refid="snake-yaml"/>
+    <path refid="jackson-annotations"/>
+  </path>
+
+  <path id="src-path">
+    <dirset dir="${basedir}/src/main">
+      <include name="code"/>
+      <include name="resources"/>
+    </dirset>
+  </path>
+
+  <target name="compile-classes" description="Compile module vut.project.main; production classes">
+    <mkdir dir="${output-dir}"/>
+
+    <javac destdir="${output-dir}" debug="${compiler.debug}" nowarn="${compiler-warn}" fork="true">
+      <compilerarg line="${compiler-args}"/>
+      <classpath refid="class-path"/>
+      <src refid="src-path"/>
+    </javac>
+    
+    <copy todir="${output-dir}">
+      <fileset dir="${basedir}/src/main/code">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${basedir}/src/main/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+
+
+  <target name="clean" description="cleanup module">
+    <delete dir="${output-dir}"/>
+  </target>
+
+
+  <target name="compile" depends="clean, compile-classes" description="build all modules"/>
+
+
+  <target name="jar" depends="compile">
+    <mkdir dir="dest/jar"/>
+    <jar destfile="dest/jar/ija_project.jar"  basedir="build/classes/java/main/">
+      <zipgroupfileset dir="lib" includes="jackson-core-2.11.0.jar" />
+      <zipgroupfileset dir="lib" includes="jackson-annotations-2.11.0.jar" />
+      <zipgroupfileset dir="lib" includes="jackson-databind-2.11.0.jar" />
+      <zipgroupfileset dir="lib" includes="jackson-dataformat-yaml-2.11.0.jar" />
+      <zipgroupfileset dir="lib" includes="snakeyaml-1.26.jar" />
+      <manifest>
+        <attribute name="Main-Class" value="ija_project.Main"/>
+        <attribute name="Jackson" value="main"/>
+      </manifest>
+    </jar>
+  </target>
+
+
+  <target name="run" depends="compile, jar" >
+    <java jar="dest/jar/ija_project.jar" fork="true"/>
+  </target>
+
+
+  <target name="all" depends="compile, jar, run" description="build all, build jar and run"/>
+</project>

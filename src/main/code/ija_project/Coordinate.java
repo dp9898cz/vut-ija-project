@@ -5,31 +5,63 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.Objects;
 
+/**
+ * Coordinate represents one point on the map
+ * It has x and y double property
+ * @author Daniel Pátek (xpatek08)
+ * @author Daniel Čechák (xcecha06)
+ * @version %I%, %G%
+ */
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Coordinate {
+    /**
+     * X coordinate
+     */
     private double x;
+    /**
+     * Y coordinate
+     */
     private double y;
 
+    /**
+     * Default constructor for Jackson
+     */
     private Coordinate() {}
 
-    // Constructor
+    /**
+     * Contructor of Coordinate
+     * @param x X coordinate
+     * @param y Y coordinate
+     */
     public Coordinate(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
+    /**
+     * {@link Coordinate#x}
+     */
     public double getX() {
         return x;
     }
 
+    /**
+     * {@link Coordinate#y}
+     */
     public double getY() {
         return y;
     }
 
+    /**
+     * {@link Coordinate#x}
+     */
     public void setX(double x) {
         this.x = x;
     }
 
+    /**
+     * {@link Coordinate#y}
+     */
     public void setY(double y) {
         this.y = y;
     }

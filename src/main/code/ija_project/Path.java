@@ -7,32 +7,49 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Path class representing one Path
+ * @author Daniel Pátek (xpatek08)
+ * @author Daniel Čechák (xcecha06)
+ * @version 1.0
+ */
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Path {
+    /**
+     * List of coordinates vehicle follows
+     */
     private List<Coordinate> path;
+
+    /**
+     * Number of the line
+     */
     private String number;
 
+    /**
+     * List of stops which are real Stops
+     */
     @JsonIgnore
-    private List<Stop> stopList = new ArrayList<>();
+    private final List<Stop> stopList = new ArrayList<>();
 
+    /**
+     * Default constructor for Jackson.
+     */
     private Path(){}
 
-    // Constructor
+    /**
+     * Path constructor
+     * @param path List of coordinates of path
+     * @param number Number of the line
+     */
     public Path(List<Coordinate> path, String number) {
         this.path = path;
         this.number = number;
-        setStopList();
     }
 
-    public List<Stop> getStopList() {
-        return stopList;
-    }
-
-    public void setStopList(List<Stop> stopList) {
-        this.stopList = stopList;
-    }
-
-
+    /**
+     * Get total distance of the Path
+     * @return Total path distance
+     */
     @JsonIgnore
     public double getPathDistance() {
         double finalDistance = 0;
@@ -42,20 +59,29 @@ public class Path {
         return finalDistance;
     }
 
+    /**
+     * Get distance between two coordinates
+     * @param a coordinate A
+     * @param b coordinate B
+     * @return distance between coordinate A and coordinate B
+     */
     @JsonIgnore
     public double getDistance(Coordinate a, Coordinate b) {
         return Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY(), 2));
     }
 
+    /**
+     * Get next Coordinate depending on distance moved
+     * @param distance Current distance of vehicle
+     * @param v
+     * @return
+     */
     @JsonIgnore
-    // get next Coordinate depending on distance moved
-    // distance = new distance
     public Coordinate getDistanceCoordinate(double distance, Vehicle v) {
         double nextDistance = 0;    // distance to the next stop
         double length = 0;          // dummy distance - distance of the previous segments (helpful for the next for loop)
         Coordinate x = null;
         Coordinate y = null;
-
 
         for (int i = 0; i < path.size() - 1; i++) {
             x = path.get(i);
@@ -76,12 +102,14 @@ public class Path {
                 x.getY() + (y.getY() - x.getY()) * driven);
     }
 
-    private void setStopList() {
 
-    }
 
     public List<Coordinate> getPath() {
         return path;
+    }
+
+    public List<Stop> getStopList() {
+        return stopList;
     }
 
     public String getNumber() {
