@@ -78,7 +78,7 @@ public class Main extends Application {
         //mapper.writeValue(new File("test.yml"), data);
 
         // deserialization
-        Data data1 = mapper.readValue(new File("data.yml"), Data.class);
+        Data data1 = mapper.readValue(new File("data/data.yml"), Data.class);
 
         // import elements to gui
         List<Drawable> elements = new ArrayList<>(data1.getStreets());
