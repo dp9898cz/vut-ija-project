@@ -523,7 +523,7 @@ public class Controller {
      */
     @FXML
     public void onHelp() {
-        Alert alert=new Alert(Alert.AlertType.INFORMATION,"Tohle je help");
+        Alert alert=new Alert(Alert.AlertType.INFORMATION,"Simulace městské hromadné dopravy\n Po kliknutí na vozidlo se zobrazí trasa a podrobnosti spoje.\n Můžete měnit rychlost simulace a také nastavit výchozí čas.");
         alert.showAndWait();
     }
 
