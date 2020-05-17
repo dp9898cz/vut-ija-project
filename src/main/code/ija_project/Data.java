@@ -53,6 +53,7 @@ public class Data {
 
     /**
      * {@link Data#coordinates}
+     * @return List of coordinates
      */
     public List<Coordinate> getCoordinates() {
         return coordinates;
@@ -60,6 +61,7 @@ public class Data {
 
     /**
      * {@link Data#vehicles}
+     * @return List of Vehicles
      */
     public List<Vehicle> getVehicles() {
         return vehicles;
@@ -67,6 +69,7 @@ public class Data {
 
     /**
      * {@link Data#streets}
+     * @return List of streets
      */
     public List<Street> getStreets() {
         return streets;
@@ -74,6 +77,7 @@ public class Data {
 
     /**
      * {@link Data#stops}
+     * @return List of stops
      */
     public List<Stop> getStops() {
         return stops;
@@ -81,6 +85,7 @@ public class Data {
 
     /**
      * {@link Data#paths}
+     * @return List of paths
      */
     public List<Path> getPaths() {
         return paths;

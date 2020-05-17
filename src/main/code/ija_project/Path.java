@@ -73,8 +73,8 @@ public class Path {
     /**
      * Get next Coordinate depending on distance moved
      * @param distance Current distance of vehicle
-     * @param v
-     * @return
+     * @param v Vehicle object
+     * @return New position coordinates
      */
     @JsonIgnore
     public Coordinate getDistanceCoordinate(double distance, Vehicle v) {
@@ -98,20 +98,31 @@ public class Path {
 
         if (x == null) return null;
 
+        // new coordinates
         return new Coordinate(x.getX() + (y.getX() - x.getX()) * driven,
                 x.getY() + (y.getY() - x.getY()) * driven);
     }
 
-
-
+    /**
+     * {@link Path#path}
+     * @return List of coordinates Path
+     */
     public List<Coordinate> getPath() {
         return path;
     }
 
+    /**
+     * {@link Path#stopList}
+     * @return List of Stops
+     */
     public List<Stop> getStopList() {
         return stopList;
     }
 
+    /**
+     * {@link Path#number}
+     * @return Number of line
+     */
     public String getNumber() {
         return number;
     }

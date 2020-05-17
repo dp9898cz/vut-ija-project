@@ -4,73 +4,128 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.AccessibleRole;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static javafx.scene.paint.Color.rgb;
 
+/**
+ * Controller class for handling application and timer
+ * @author Daniel Pátek (xpatek08)
+ * @author Daniel Čechák (xcecha06)
+ * @version 1.0
+ */
 public class Controller {
+    /**
+     * Timer textfield
+     */
     @FXML
     public TextField Timer;
-    @FXML
-    public TextField Timer_update;
-    @FXML
-    public TextField searchbox ;
-    @FXML
-    public Button searchbutton;
+
+    /**
+     * Text area for information about vehicle
+     */
     @FXML
     public TextArea textArea;
-    public MenuBar Menubarrr;
+
+    /**
+     * Hours input field
+     */
     @FXML
     public TextField Hours;
+
+    /**
+     * Minutes input field
+     */
     @FXML
     public TextField Minutes;
+
+    /**
+     * Seconds input field
+     */
     @FXML
     public TextField Seconds;
 
+    /**
+     * Actual Timer
+     */
     @FXML
     private Timer timer;
 
-    private LocalTime time = LocalTime.now();
-    private LocalTime timeTemp = LocalTime.now();
-
-    private final List<TimerMapUpdate> elementsUpdate = new ArrayList<>();
-
-    private final List<Vehicle> vehicles = new ArrayList<>();
-    private final List<Coordinate> stops = new ArrayList<>();
-    private final List<Stop> allStops = new ArrayList<>();
+    /**
+     * Textfield for scaling time
+     */
     @FXML
     private TextField scaleTextField;
+
+    /**
+     * Mapcontent pane with GUI elements
+     */
     @FXML
     private Pane mapContent;
+
+    /**
+     * Local time updating
+     */
+    private LocalTime time = LocalTime.now();
+
+    /**
+     * Start local time not updating
+     */
+    private LocalTime timeTemp = LocalTime.now();
+
+    /**
+     * List of all GUI elements
+     */
+    private final List<TimerMapUpdate> elementsUpdate = new ArrayList<>();
+
+    /**
+     * List of all Vehicles
+     */
+    private final List<Vehicle> vehicles = new ArrayList<>();
+
+    /**
+     * List of all coordinates
+     */
+    private final List<Coordinate> stops = new ArrayList<>();
+    /**
+     * List of all Stops
+     */
+    private final List<Stop> allStops = new ArrayList<>();
+
+    /**
+     * MAX Constant for zooming
+     */
     private static final double MAX_SCALE = 10;
+
+    /**
+     * MIN Constant for zooming
+     */
     private static final double MIN_SCALE = -6;
+
+    /**
+     * Zoomhandler counter
+     */
     public  double zoomhandler = 0;
 
 
-
-    //TODO
-
+    /**
+     * Get start time of vehicle in the past
+     * @param v Vehicle
+     * @return Local time of vehicle's start time
+     */
     private LocalTime getPastStartTime(Vehicle v) {
         LocalTime fakeTime = time.truncatedTo(ChronoUnit.MINUTES);
         for (int i = 0; i < 4; i++) {
@@ -82,6 +137,9 @@ public class Controller {
         return null;
     }
 
+    /**
+     * Generate vehicles currently running and put them to GUI
+     */
     private void generateVehiclesOnTheRoad() {
         for (Vehicle v : vehicles) {
             LocalTime startTime = getPastStartTime(v); // start time
@@ -109,13 +167,10 @@ public class Controller {
     }
 
 
-    @FXML
-    private void searchAction() {
-        float search = Float.parseFloat(searchbox.getText());
-    }
-
-
-    //Function for zooming
+    /**
+     * Zoom handler function
+     * @param e ScrollEvent
+     */
     @FXML
     private void onScroll(ScrollEvent e) {
         e.consume();
@@ -125,8 +180,6 @@ public class Controller {
         if (zoom > 0) {
             zoomhandler = zoomhandler+1;
             zoom = 1.1;
-
-
         }else {
             zoomhandler = zoomhandler-1;
             zoom = 0.9;
@@ -145,10 +198,10 @@ public class Controller {
         mapContent.layout();
     }
 
-    @FXML
-    private void OnTimeReset(){
 
-    }
+    /**
+     * Handler for time scale change
+     */
     @FXML
     private void onScaleChange() {
         try {
@@ -162,6 +215,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Time change handler
+     */
     @FXML
     private void onTimeChange() {
         try {
@@ -169,7 +225,7 @@ public class Controller {
             int minutes = Integer.parseInt(Minutes.getText());
             int seconds = Integer.parseInt(Seconds.getText());
             if (hours < 0 || hours > 23 || minutes < 0 || minutes > 60 || seconds < 0 || seconds > 60) {
-                showNumberAlert();
+                showTimeNumberAlert();
                 return;
             }
             // get time
@@ -195,16 +251,31 @@ public class Controller {
 
         }
         catch (NumberFormatException e) {
-            showNumberAlert();
+            showTimeNumberAlert();
         }
     }
 
 
+    /**
+     * Show alert for bad number entered
+     */
     public void showNumberAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR, "Špatně zadané číslo. Možnosti jsou od 1 do 10.");
         alert.showAndWait();
     }
 
+    /**
+     * Show alert for bad number entered for time
+     */
+    public void showTimeNumberAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR, "Špatně zadaný čas. Možnosti jsou od 0 do 24 pro hodiny, od 0 do 59 pro minuty a sekundy.");
+        alert.showAndWait();
+    }
+
+    /**
+     * Generate vehicle and put it to the GUI
+     * @param a Vehicle to generate
+     */
     private void generateVehicle(Vehicle a) {
             Vehicle v = new Vehicle(a.getPath().getPath().get(0), a.getSpeed(), a.getPath(), a.getStopsTimes(), a.getGoEveryXMinute(), a.getStartMinute());
             setActions(v.getGui(), v);
@@ -212,6 +283,10 @@ public class Controller {
             this.mapContent.getChildren().addAll(v.getGui());
     }
 
+    /**
+     * Generate opposite vehicle and put it to the GUI
+     * @param v Vehicle
+     */
     private void generateOppositeVehicle(Vehicle v) {
         // reverse lists
         List<Coordinate> oppositePath = new ArrayList<>(v.getPath().getPath());
@@ -245,12 +320,21 @@ public class Controller {
     }
 
 
+    /**
+     * Destroy vehicle
+     * @param v Vehicle object
+     */
     private void destroyBus(Vehicle v) {
         this.elementsUpdate.remove(v);
         this.mapContent.getChildren().removeAll(v.getGui());
     }
 
 
+    /**
+     * Set click actions on the Vehicle objects
+     * @param drawables List of all drawables in gui
+     * @param v Vehicle object
+     */
     void setActions(List<Shape> drawables, Vehicle v) {
         for (Shape s : drawables) {
             // get role (right circle)
@@ -263,13 +347,16 @@ public class Controller {
                     deleteVisibleLines();
                     for (Shape ss: v.getGui() ) {
                         if (ss instanceof Line) ss.setStroke(rgb(220,0,0,1));
-
                     }
                 });
             }
         }
     }
 
+    /**
+     * Set click actions on the grass (cancel click)
+     * @param p Current Pane
+     */
     private void setClickOnGrass(Pane p) {
         p.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -283,6 +370,9 @@ public class Controller {
         });
     }
 
+    /**
+     * Delete all visible lines from GUI
+     */
     private void deleteVisibleLines() {
         // delete lines which are visible
         for (TimerMapUpdate s : elementsUpdate) {
@@ -296,7 +386,10 @@ public class Controller {
         }
     }
 
-
+    /**
+     * Set elements on the start
+     * @param elements List of elements drawables
+     */
     public void setElements(List<Drawable> elements) {
         for (Drawable d : elements) {
             if (d.getClass().equals(Vehicle.class)) {
@@ -326,15 +419,6 @@ public class Controller {
             }
 
         }
-
-//        for (Stop s : allStops) {
-//            for (Vehicle v : vehicles) {
-//                if (v.getPath().getPath().contains(s.getCoordinates())) {
-//                    v.getPath().getStopList().add(s);
-//                }
-//            }
-//        }
-
         // there generate vehicles on the road
         generateVehiclesOnTheRoad();
 
@@ -342,7 +426,10 @@ public class Controller {
         setClickOnGrass(mapContent);
     }
 
-
+    /**
+     * Timer function
+     * @param scale Timer scale to set
+     */
     public void timer(float scale) {
         timer = new Timer(false);
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -398,12 +485,6 @@ public class Controller {
                             timePassedSinceStart = Math.abs(Duration.between(timeStart, time).toMillis()) / 1000;
                         }
 
-                        //DEBUG todo
-                        if (v.getNumber().equals("44")) {
-                            //System.out.println(String.format("%s: passed: %d scheduled: %d", v.getNumber(), timePassedSinceStart, scheduledTime));
-                            //System.out.println(getLineInfo(v));
-                        }
-
                         // bus got to the Stop -> change lastStop (and quit for next calculation of scheduled Time)
                         if (stops.contains(pos) && v.getLastStop() != pos && timePassedSinceStart != 0) {
                             v.setLastStop(pos);
@@ -429,7 +510,6 @@ public class Controller {
                     }
 
                     Timer.setText(time.truncatedTo(ChronoUnit.SECONDS).toString());
-                    int s = Math.toIntExact(Math.abs(Duration.between(timeTemp, time).toMillis()) / 1000);
                     
                 }
                 );
@@ -438,58 +518,71 @@ public class Controller {
     }
 
 
-
+    /**
+     * Show help
+     */
     @FXML
     public void onHelp() {
         Alert alert=new Alert(Alert.AlertType.INFORMATION,"Tohle je help");
         alert.showAndWait();
     }
+
+    /**
+     * Close app
+     */
     @FXML
     public void onCloseApp() {
         Platform.exit();
         System.exit(0);
     }
+
+    /**
+     * Start app
+     */
     @FXML
     private void OnStart(){
+        timer.cancel();
         timer(1);
     }
+
+    /**
+     * Pause app
+     */
     @FXML
     private void OnPause(){
         timer.cancel();
     }
+
+    /**
+     * Primary stage
+     */
     private Stage primaryStage;
+
+    /**
+     * Set primary stage
+     * @param stage Primary stage
+     */
     public void setStage(Stage stage) {
         primaryStage = stage;
     }
+
+    /**
+     * Maximazed window boolean
+     */
     private boolean maximized = false;
+
+    /**
+     * Maximize handler
+     * @param actionEvent actionEvent
+     */
     public void onMinimaze(ActionEvent actionEvent) {
-        if(maximized == false) {
+        if (maximized == false) {
             primaryStage.setMaximized(true);
             maximized = true;
-        }else{
+        } else {
             primaryStage.setMaximized(false);
             maximized = false;
         }
 
     }
-
-//    private double xOffset = 800;
-//    private double yOffset = 600;
-//    private double changex ;
-//    private double changey ;
-//    public void onResizeDrag(MouseEvent event) {
-//        changex= event.getSceneX() -changex;
-//        changey= event.getSceneY() -changey;
-//        xOffset=xOffset+changex;
-//        yOffset=yOffset+changey;
-//        primaryStage.setWidth(xOffset);
-//        primaryStage.setHeight(yOffset);
-//
-//    }
-//    public void OnResizeClicked(MouseEvent event) {
-//        changex =  event.getSceneX();
-//        changey =  event.getSceneY();
-//    }
-
-
 }

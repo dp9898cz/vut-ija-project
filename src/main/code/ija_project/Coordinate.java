@@ -40,6 +40,7 @@ public class Coordinate {
 
     /**
      * {@link Coordinate#x}
+     * @return Coordinate X
      */
     public double getX() {
         return x;
@@ -47,6 +48,7 @@ public class Coordinate {
 
     /**
      * {@link Coordinate#y}
+     * @return Coordinate Y
      */
     public double getY() {
         return y;
@@ -54,6 +56,7 @@ public class Coordinate {
 
     /**
      * {@link Coordinate#x}
+     * @param x Coordinate X
      */
     public void setX(double x) {
         this.x = x;
@@ -61,6 +64,7 @@ public class Coordinate {
 
     /**
      * {@link Coordinate#y}
+     * @param y Coordinate Y
      */
     public void setY(double y) {
         this.y = y;

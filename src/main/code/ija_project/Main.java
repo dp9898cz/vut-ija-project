@@ -18,9 +18,28 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main class
+ * @author Daniel Pátek (xpatek08)
+ * @author Daniel Čechák (xcecha06)
+ * @version 1.0
+ */
 public class Main extends Application {
+    /**
+     * xOffset
+     */
     private double xOffset = 0;
+
+    /**
+     * yOffset
+     */
     private double yOffset = 0;
+
+    /**
+     * Start main function
+     * @param primaryStage primaryStage
+     * @throws Exception Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception{
         // load the scene
@@ -60,10 +79,6 @@ public class Main extends Application {
 
         // deserialization
         Data data1 = mapper.readValue(new File("data.yml"), Data.class);
-//        System.out.println(data1.getCoordinates());
-//        System.out.println(data1.getStops());
-//        System.out.println(data1.getStreets());
-//        System.out.println(data1.getVehicles());
 
         // import elements to gui
         List<Drawable> elements = new ArrayList<>(data1.getStreets());
@@ -76,6 +91,10 @@ public class Main extends Application {
     }
 
 
+    /**
+     * Main
+     * @param args params
+     */
     public static void main(String[] args) {
         launch(args);
     }

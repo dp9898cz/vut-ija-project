@@ -1,5 +1,16 @@
 package ija_project;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.util.StdConverter;
+
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -8,15 +19,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.util.StdConverter;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,19 +26,52 @@ import java.util.List;
 import static java.lang.Math.*;
 import static javafx.scene.paint.Color.rgb;
 
-
+/**
+ * Street class represent street
+ * @author Daniel Pátek (xpatek08)
+ * @author Daniel Čechák (xcecha06)
+ * @version 1.0
+ */
 @JsonDeserialize(converter = Street.StreetConstruct.class)
 public class Street implements Drawable{
+    /**
+     * Actual traffic on the street
+     */
     @JsonIgnore
-    public double urovenzatizeni = 1.0;
+    public double traffic = 1.0;
 
+    /**
+     * Start point of the street
+     */
     private Coordinate start;
+
+    /**
+     * End point of the street
+     */
     private Coordinate end;
+
+    /**
+     * Street name
+     */
     private String name;
+
+    /**
+     * List of Stops on the street
+     */
     private List<Stop> stops;
 
+    /**
+     * Default constructor for Jackson purposes
+     */
     public Street() {}
 
+    /**
+     * Street constructor (calls setStops())
+     * @param name Street name
+     * @param start Street start coordinates
+     * @param end Street end coordinates
+     * @param stops List of stops
+     */
     public Street(String name, Coordinate start, Coordinate end, List<Stop> stops) {
         this.start = start;
         this.end = end;
@@ -45,27 +80,60 @@ public class Street implements Drawable{
         setStops();
     }
 
+    /**
+     * Set street of every stop at this street
+     * {@link Street#stops}
+     */
     public void setStops() {
         for (Stop s: this.stops) {
             s.setStreet(this);
         }
     }
+
+    /**
+     * {@link Street#start}
+     * @return Start coordinates
+     */
     public Coordinate getStart() {
         return start;
     }
 
+    /**
+     * {@link Street#end}
+     * @return End coordinates
+     */
     public Coordinate getEnd() {
         return end;
     }
 
+    /**
+     * {@link Street#traffic}
+     * @return Current traffic
+     */
+    public double getTraffic() {
+        return traffic;
+    }
+
+    /**
+     * {@link Street#name}
+     * @return Street name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * {@link Street#stops}
+     * @return List of stops
+     */
     public List<Stop> getStops() {
         return stops;
     }
 
+    /**
+     * Get gui (set all the elements of Street GUI)
+     * @return List of shapes of GUI
+     */
     @Override
     @JsonIgnore
     public List<Shape> getGui() {
@@ -158,7 +226,7 @@ public class Street implements Drawable{
                 button.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler<MouseEvent>() {
                             @Override public void handle(MouseEvent e) {
-                                urovenzatizeni=1.0;
+                                traffic =1.0;
                                 line2.setStroke(rgb(75,75,75));
                                 popupwindow.close();
                             }
@@ -166,7 +234,7 @@ public class Street implements Drawable{
                 button1.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler<MouseEvent>() {
                             @Override public void handle(MouseEvent e) {
-                                urovenzatizeni=1.3;
+                                traffic =1.3;
                                 line2.setStroke(Color.YELLOW);
                                 popupwindow.close();
                             }
@@ -174,7 +242,7 @@ public class Street implements Drawable{
                 button2.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler<MouseEvent>() {
                             @Override public void handle(MouseEvent e) {
-                                urovenzatizeni=1.6;
+                                traffic =1.6;
                                 line2.setStroke(Color.ORANGE);
                                 popupwindow.close();
                             }
@@ -182,7 +250,7 @@ public class Street implements Drawable{
                 button3.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler<MouseEvent>() {
                             @Override public void handle(MouseEvent e) {
-                                urovenzatizeni= 2;
+                                traffic = 2;
                                 line2.setStroke(Color.RED);
                                 popupwindow.close();
                             }
@@ -277,11 +345,6 @@ public class Street implements Drawable{
                 return Arrays.asList(line2,line,text,text2,text3,clickable);
         }
         return Arrays.asList(line2,line,text);
-
-    }
-
-    public double getUrovenzatizeni() {
-        return urovenzatizeni;
     }
 
     @Override
@@ -294,8 +357,20 @@ public class Street implements Drawable{
                 '}';
     }
 
+    /**
+     * Static class for Jackson
+     * Used for initialisation of stops
+     * @author Daniel Pátek (xpatek08)
+     * @author Daniel Čechák (xcecha06)
+     * @version 1.0
+     */
     static class StreetConstruct extends StdConverter<Street, Street> {
 
+        /**
+         * Initialize Street's stops
+         * @param value Street object
+         * @return Initialized Street object
+         */
         @Override
         public Street convert(Street value) {
             value.setStops();

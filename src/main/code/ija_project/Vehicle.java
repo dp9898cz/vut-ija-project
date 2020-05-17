@@ -252,7 +252,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
             lines.add(line);
         }
 
-        Line end = new Line(first_coordinate.getX() +10,first_coordinate.getY()+10,first_coordinate.getX()+10,first_coordinate.getY()+10);
+        Line end = new Line(first_coordinate.getX() +10,first_coordinate.getY()-10,first_coordinate.getX()+10,first_coordinate.getY()-10);
         end.setStroke(rgb(0,0,0,0));
         end.setAccessibleRole(AccessibleRole.RADIO_MENU_ITEM);
         end.setStrokeWidth(12);
@@ -349,7 +349,7 @@ public class Vehicle implements Drawable, TimerMapUpdate {
 
             double streetTraffic = 1.0;
             if (currentStreet != null)
-                streetTraffic = currentStreet.getUrovenzatizeni();
+                streetTraffic = currentStreet.getTraffic();
 
             List<Coordinate> stops = new ArrayList<>();
             for (Stop s : path.getStopList()) {
